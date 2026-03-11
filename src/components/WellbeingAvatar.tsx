@@ -12,9 +12,13 @@ const avatarImages: Record<AvatarMood, string> = {
   calm: avatarCalm,
 };
 
-// Position each outfit item on the avatar body
+// Image overlays for items that need real art instead of emojis
+const outfitImages: Record<string, string> = {
+  scarf: itemScarf,
+};
+
 const outfitPositions: Record<string, React.CSSProperties> = {
-  scarf: { bottom: "15%", left: "50%", transform: "translateX(-50%)", fontSize: "1.75rem" },
+  scarf: { bottom: "2%", left: "50%", transform: "translateX(-50%)", width: "75%", zIndex: 10 },
   sunglasses: { top: "28%", left: "50%", transform: "translateX(-50%)", fontSize: "1.5rem" },
   crown: { top: "-8%", left: "50%", transform: "translateX(-50%)", fontSize: "2rem" },
 };
