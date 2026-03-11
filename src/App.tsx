@@ -16,7 +16,7 @@ import { useAppState } from "@/hooks/useAppState";
 const queryClient = new QueryClient();
 
 function AppContent() {
-  const { state, completeTask, addTask, submitCheckIn, takeRecoveryBreak, skipRecoveryBreak } = useAppState();
+  const { state, completeTask, addTask, submitCheckIn, takeRecoveryBreak, skipRecoveryBreak, purchaseItem, equipItem } = useAppState();
 
   return (
     <>
