@@ -96,7 +96,18 @@ export default function WellbeingAvatar({ mood, xp, level, compact, equippedItem
           {/* Outfits rendered ON the avatar */}
           {equippedOutfits.map(item => {
             const pos = outfitPositions[item.id] ?? { top: "10%", left: "50%", transform: "translateX(-50%)", fontSize: "1.75rem" };
-            return (
+            const imgSrc = outfitImages[item.id];
+            return imgSrc ? (
+              <motion.img
+                key={item.id}
+                src={imgSrc}
+                alt={item.name}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="absolute pointer-events-none"
+                style={pos}
+              />
+            ) : (
               <motion.span
                 key={item.id}
                 initial={{ scale: 0 }}
