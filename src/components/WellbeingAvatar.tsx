@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import avatarHappy from "@/assets/avatar-happy.png";
 import avatarTired from "@/assets/avatar-tired.png";
 import avatarCalm from "@/assets/avatar-calm.png";
+import itemScarf from "@/assets/item-scarf.png";
 import { AvatarMood, AvatarItem, getAvatarMessage } from "@/lib/store";
 import { useMemo } from "react";
 
@@ -11,9 +12,13 @@ const avatarImages: Record<AvatarMood, string> = {
   calm: avatarCalm,
 };
 
-// Position each outfit item on the avatar body
+// Image overlays for items that need real art instead of emojis
+const outfitImages: Record<string, string> = {
+  scarf: itemScarf,
+};
+
 const outfitPositions: Record<string, React.CSSProperties> = {
-  scarf: { bottom: "15%", left: "50%", transform: "translateX(-50%)", fontSize: "1.75rem" },
+  scarf: { bottom: "2%", left: "50%", transform: "translateX(-50%)", width: "75%", zIndex: 10 },
   sunglasses: { top: "28%", left: "50%", transform: "translateX(-50%)", fontSize: "1.5rem" },
   crown: { top: "-8%", left: "50%", transform: "translateX(-50%)", fontSize: "2rem" },
 };
@@ -91,7 +96,18 @@ export default function WellbeingAvatar({ mood, xp, level, compact, equippedItem
           {/* Outfits rendered ON the avatar */}
           {equippedOutfits.map(item => {
             const pos = outfitPositions[item.id] ?? { top: "10%", left: "50%", transform: "translateX(-50%)", fontSize: "1.75rem" };
-            return (
+            const imgSrc = outfitImages[item.id];
+            return imgSrc ? (
+              <motion.img
+                key={item.id}
+                src={imgSrc}
+                alt={item.name}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="absolute pointer-events-none"
+                style={pos}
+              />
+            ) : (
               <motion.span
                 key={item.id}
                 initial={{ scale: 0 }}
