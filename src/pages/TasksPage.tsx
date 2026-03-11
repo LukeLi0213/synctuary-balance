@@ -159,7 +159,7 @@ export default function TasksPage({ tasks, avatarMood, xp, level, onComplete, on
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.05 }}
           >
-            <TaskRow task={task} onToggle={() => onComplete(task.id)} />
+            <TaskRow task={task} onToggle={() => handleComplete(task.id)} />
           </motion.div>
         ))}
       </div>
