@@ -16,7 +16,7 @@ import { useAppState } from "@/hooks/useAppState";
 const queryClient = new QueryClient();
 
 function AppContent() {
-  const { state, completeTask, addTask, submitCheckIn, takeRecoveryBreak, skipRecoveryBreak } = useAppState();
+  const { state, completeTask, addTask, submitCheckIn, takeRecoveryBreak, skipRecoveryBreak, purchaseItem, equipItem } = useAppState();
 
   return (
     <>
@@ -64,11 +64,13 @@ function AppContent() {
         <Route
           path="/avatar"
           element={
-            <AvatarPage
+          <AvatarPage
               inventory={state.inventory}
               avatarMood={state.avatarMood}
               xp={state.xp}
               level={state.level}
+              onPurchase={purchaseItem}
+              onEquip={equipItem}
             />
           }
         />

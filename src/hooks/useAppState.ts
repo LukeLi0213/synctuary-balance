@@ -110,6 +110,42 @@ export function useAppState() {
     });
   }, []);
 
+  const purchaseItem = useCallback((itemId: string) => {
+    setState(prev => {
+      const item = prev.inventory.find(i => i.id === itemId);
+      if (!item || item.owned || !item.unlocked) return prev;
+      if (prev.xp < item.xpRequired) {
+        console.log(`[Synctuary] Not enough XP to purchase ${item.name}. Need ${item.xpRequired}, have ${prev.xp}`);
+        return prev;
+      }
+      const newXP = prev.xp - item.xpRequired;
+      console.log(`[Synctuary] Purchased ${item.name} for ${item.xpRequired} XP. Remaining: ${newXP}`);
+      return {
+        ...prev,
+        xp: newXP,
+        level: getLevelFromXP(newXP),
+        inventory: prev.inventory.map(i =>
+          i.id === itemId ? { ...i, owned: true, equipped: true } : i
+        ),
+      };
+    });
+  }, []);
+
+  const equipItem = useCallback((itemId: string) => {
+    setState(prev => {
+      const item = prev.inventory.find(i => i.id === itemId);
+      if (!item || !item.owned) return prev;
+      const newEquipped = !item.equipped;
+      console.log(`[Synctuary] ${newEquipped ? "Equipped" : "Unequipped"} ${item.name}`);
+      return {
+        ...prev,
+        inventory: prev.inventory.map(i =>
+          i.id === itemId ? { ...i, equipped: newEquipped } : i
+        ),
+      };
+    });
+  }, []);
+
   return {
     state,
     completeTask,
@@ -117,5 +153,7 @@ export function useAppState() {
     submitCheckIn,
     takeRecoveryBreak,
     skipRecoveryBreak,
+    purchaseItem,
+    equipItem,
   };
 }

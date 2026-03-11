@@ -30,6 +30,8 @@ export interface AvatarItem {
   icon: string;
   xpRequired: number;
   unlocked: boolean;
+  owned: boolean;
+  equipped: boolean;
 }
 
 export type AvatarMood = "happy" | "tired" | "calm";
@@ -47,15 +49,15 @@ export interface AppState {
 }
 
 export const defaultInventory: AvatarItem[] = [
-  { id: "scarf", name: "Cozy Scarf", type: "outfit", icon: "🧣", xpRequired: 0, unlocked: true },
-  { id: "sunglasses", name: "Cool Shades", type: "outfit", icon: "🕶️", xpRequired: 100, unlocked: false },
-  { id: "crown", name: "Balance Crown", type: "outfit", icon: "👑", xpRequired: 300, unlocked: false },
-  { id: "butterfly", name: "Companion Butterfly", type: "pet", icon: "🦋", xpRequired: 50, unlocked: false },
-  { id: "bunny", name: "Rest Bunny", type: "pet", icon: "🐰", xpRequired: 200, unlocked: false },
-  { id: "cat", name: "Study Cat", type: "pet", icon: "🐱", xpRequired: 400, unlocked: false },
-  { id: "plant", name: "Desk Plant", type: "decoration", icon: "🪴", xpRequired: 75, unlocked: true },
-  { id: "crystals", name: "Zen Crystals", type: "decoration", icon: "💎", xpRequired: 150, unlocked: false },
-  { id: "lantern", name: "Calm Lantern", type: "decoration", icon: "🏮", xpRequired: 250, unlocked: false },
+  { id: "scarf", name: "Cozy Scarf", type: "outfit", icon: "🧣", xpRequired: 0, unlocked: true, owned: true, equipped: false },
+  { id: "sunglasses", name: "Cool Shades", type: "outfit", icon: "🕶️", xpRequired: 100, unlocked: false, owned: false, equipped: false },
+  { id: "crown", name: "Balance Crown", type: "outfit", icon: "👑", xpRequired: 300, unlocked: false, owned: false, equipped: false },
+  { id: "butterfly", name: "Companion Butterfly", type: "pet", icon: "🦋", xpRequired: 50, unlocked: false, owned: false, equipped: false },
+  { id: "bunny", name: "Rest Bunny", type: "pet", icon: "🐰", xpRequired: 200, unlocked: false, owned: false, equipped: false },
+  { id: "cat", name: "Study Cat", type: "pet", icon: "🐱", xpRequired: 400, unlocked: false, owned: false, equipped: false },
+  { id: "plant", name: "Desk Plant", type: "decoration", icon: "🪴", xpRequired: 75, unlocked: true, owned: true, equipped: false },
+  { id: "crystals", name: "Zen Crystals", type: "decoration", icon: "💎", xpRequired: 150, unlocked: false, owned: false, equipped: false },
+  { id: "lantern", name: "Calm Lantern", type: "decoration", icon: "🏮", xpRequired: 250, unlocked: false, owned: false, equipped: false },
 ];
 
 export const defaultState: AppState = {

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import avatarHappy from "@/assets/avatar-happy.png";
 import avatarTired from "@/assets/avatar-tired.png";
 import avatarCalm from "@/assets/avatar-calm.png";
-import { AvatarMood, getAvatarMessage } from "@/lib/store";
+import { AvatarMood, AvatarItem, getAvatarMessage } from "@/lib/store";
 import { useMemo } from "react";
 
 const avatarImages: Record<AvatarMood, string> = {
@@ -16,18 +16,32 @@ interface Props {
   xp: number;
   level: number;
   compact?: boolean;
+  equippedItems?: AvatarItem[];
 }
 
-export default function WellbeingAvatar({ mood, xp, level, compact }: Props) {
+export default function WellbeingAvatar({ mood, xp, level, compact, equippedItems = [] }: Props) {
   const message = useMemo(() => getAvatarMessage(mood), [mood]);
   const nextLevelXP = [50, 150, 300, 500, 750][Math.min(level - 1, 4)];
   const prevLevelXP = level > 1 ? [0, 50, 150, 300, 500][Math.min(level - 1, 4)] : 0;
   const progress = ((xp - prevLevelXP) / (nextLevelXP - prevLevelXP)) * 100;
 
+  const equippedOutfits = equippedItems.filter(i => i.type === "outfit");
+  const equippedPets = equippedItems.filter(i => i.type === "pet");
+  const equippedDecorations = equippedItems.filter(i => i.type === "decoration");
+
   if (compact) {
     return (
       <div className="flex items-center gap-3">
-        <img src={avatarImages[mood]} alt="Avatar" className="w-12 h-12" />
+        <div className="relative">
+          <img src={avatarImages[mood]} alt="Avatar" className="w-12 h-12" />
+          {equippedItems.length > 0 && (
+            <div className="absolute -bottom-1 -right-1 flex gap-0.5">
+              {equippedItems.slice(0, 2).map(item => (
+                <span key={item.id} className="text-xs">{item.icon}</span>
+              ))}
+            </div>
+          )}
+        </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <span className="text-xs font-medium text-muted-foreground">Lv.{level}</span>
@@ -48,9 +62,58 @@ export default function WellbeingAvatar({ mood, xp, level, compact }: Props) {
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         className="relative"
       >
+        {/* Decorations - left side */}
+        {equippedDecorations.length > 0 && (
+          <div className="absolute -left-8 top-1/2 -translate-y-1/2 flex flex-col gap-1">
+            {equippedDecorations.map(item => (
+              <motion.span
+                key={item.id}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="text-2xl"
+              >
+                {item.icon}
+              </motion.span>
+            ))}
+          </div>
+        )}
+
+        {/* Outfits - above avatar */}
+        {equippedOutfits.length > 0 && (
+          <div className="absolute -top-6 left-1/2 -translate-x-1/2 flex gap-1">
+            {equippedOutfits.map(item => (
+              <motion.span
+                key={item.id}
+                initial={{ scale: 0, y: 10 }}
+                animate={{ scale: 1, y: 0 }}
+                className="text-2xl"
+              >
+                {item.icon}
+              </motion.span>
+            ))}
+          </div>
+        )}
+
         <div className="avatar-glow rounded-full">
           <img src={avatarImages[mood]} alt="Wellbeing Avatar" className="w-32 h-32" />
         </div>
+
+        {/* Pets - right side */}
+        {equippedPets.length > 0 && (
+          <div className="absolute -right-8 bottom-0 flex flex-col gap-1">
+            {equippedPets.map(item => (
+              <motion.span
+                key={item.id}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="text-2xl"
+                style={{ animationDelay: "0.2s" }}
+              >
+                {item.icon}
+              </motion.span>
+            ))}
+          </div>
+        )}
       </motion.div>
 
       <motion.p
