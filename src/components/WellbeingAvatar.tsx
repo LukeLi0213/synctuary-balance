@@ -18,7 +18,7 @@ const outfitImages: Record<string, string> = {
 };
 
 const outfitPositions: Record<string, React.CSSProperties> = {
-  scarf: { bottom: "0%", left: "50%", transform: "translateX(-55%)", width: "80%", zIndex: 10 },
+  scarf: { top: "25%", left: "50%", transform: "translate(-50%, 0)", width: "110%", zIndex: 10 },
   sunglasses: { top: "28%", left: "50%", transform: "translateX(-50%)", fontSize: "1.5rem" },
   crown: { top: "-8%", left: "50%", transform: "translateX(-50%)", fontSize: "2rem" },
 };
