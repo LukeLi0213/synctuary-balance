@@ -33,6 +33,8 @@ interface Props {
   level: number;
   onComplete: (id: string) => void;
   onAdd: (title: string, category: Task["category"]) => void;
+  onTakeBreak: () => void;
+  onSkipBreak: () => void;
 }
 
 export default function TasksPage({ tasks, avatarMood, xp, level, onComplete, onAdd }: Props) {
