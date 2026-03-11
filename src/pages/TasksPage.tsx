@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, BookOpen, FileText, FlaskConical, Briefcase, Dumbbell, MoreHorizontal } from "lucide-react";
 import { Task } from "@/lib/store";
