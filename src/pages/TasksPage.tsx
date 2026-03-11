@@ -43,7 +43,7 @@ export default function TasksPage({ tasks, avatarMood, xp, level, onComplete, on
   const [newCategory, setNewCategory] = useState<Task["category"]>("studying");
   const [showRecovery, setShowRecovery] = useState(false);
   const [recoveryTimer, setRecoveryTimer] = useState<number | null>(null);
-  const [timerSeconds, setTimerSeconds] = useState(20);
+  const [timerSeconds, setTimerSeconds] = useState(20 * 60);
 
   const handleAdd = () => {
     if (!newTitle.trim()) return;
