@@ -64,11 +64,13 @@ function AppContent() {
         <Route
           path="/avatar"
           element={
-            <AvatarPage
+          <AvatarPage
               inventory={state.inventory}
               avatarMood={state.avatarMood}
               xp={state.xp}
               level={state.level}
+              onPurchase={purchaseItem}
+              onEquip={equipItem}
             />
           }
         />
