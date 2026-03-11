@@ -64,7 +64,7 @@ export default function TasksPage({ tasks, avatarMood, xp, level, onComplete, on
 
   const handleStartBreak = () => {
     setShowRecovery(false);
-    setTimerSeconds(20);
+    setTimerSeconds(20 * 60);
     const interval = window.setInterval(() => {
       setTimerSeconds(prev => {
         if (prev <= 1) {
