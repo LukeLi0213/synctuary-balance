@@ -194,7 +194,7 @@ export default function TasksPage({ tasks, avatarMood, xp, level, onComplete, on
                 <WellbeingAvatar mood="calm" xp={xp} level={level} compact />
               </div>
               <p className="text-sm text-muted-foreground mb-2">Recovery break in progress</p>
-              <p className="font-display text-5xl font-bold text-primary">{timerSeconds}s</p>
+              <p className="font-display text-5xl font-bold text-primary">{Math.floor(timerSeconds / 60)}:{String(timerSeconds % 60).padStart(2, '0')}</p>
               <p className="text-xs text-muted-foreground mt-3">Breathe and relax</p>
             </motion.div>
           </motion.div>
