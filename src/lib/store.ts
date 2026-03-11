@@ -30,6 +30,8 @@ export interface AvatarItem {
   icon: string;
   xpRequired: number;
   unlocked: boolean;
+  owned: boolean;
+  equipped: boolean;
 }
 
 export type AvatarMood = "happy" | "tired" | "calm";
