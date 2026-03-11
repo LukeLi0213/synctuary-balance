@@ -43,7 +43,7 @@ export default function TasksPage({ tasks, avatarMood, xp, level, onComplete, on
   const [newCategory, setNewCategory] = useState<Task["category"]>("studying");
   const [showRecovery, setShowRecovery] = useState(false);
   const [recoveryTimer, setRecoveryTimer] = useState<number | null>(null);
-  const [timerSeconds, setTimerSeconds] = useState(20);
+  const [timerSeconds, setTimerSeconds] = useState(20 * 60);
 
   const handleAdd = () => {
     if (!newTitle.trim()) return;
@@ -64,7 +64,7 @@ export default function TasksPage({ tasks, avatarMood, xp, level, onComplete, on
 
   const handleStartBreak = () => {
     setShowRecovery(false);
-    setTimerSeconds(20);
+    setTimerSeconds(20 * 60);
     const interval = window.setInterval(() => {
       setTimerSeconds(prev => {
         if (prev <= 1) {
@@ -194,7 +194,7 @@ export default function TasksPage({ tasks, avatarMood, xp, level, onComplete, on
                 <WellbeingAvatar mood="calm" xp={xp} level={level} compact />
               </div>
               <p className="text-sm text-muted-foreground mb-2">Recovery break in progress</p>
-              <p className="font-display text-5xl font-bold text-primary">{timerSeconds}s</p>
+              <p className="font-display text-5xl font-bold text-primary">{Math.floor(timerSeconds / 60)}:{String(timerSeconds % 60).padStart(2, '0')}</p>
               <p className="text-xs text-muted-foreground mt-3">Breathe and relax</p>
             </motion.div>
           </motion.div>
