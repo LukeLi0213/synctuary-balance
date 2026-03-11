@@ -175,6 +175,39 @@ export default function TasksPage({ tasks, avatarMood, xp, level, onComplete, on
           ))}
         </div>
       )}
+
+      {/* Recovery Timer Overlay */}
+      <AnimatePresence>
+        {recoveryTimer !== null && timerSeconds > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/20 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              className="glass-card-elevated p-8 max-w-xs w-full text-center"
+            >
+              <div className="mb-4">
+                <WellbeingAvatar mood="calm" xp={xp} level={level} compact />
+              </div>
+              <p className="text-sm text-muted-foreground mb-2">Recovery break in progress</p>
+              <p className="font-display text-5xl font-bold text-primary">{timerSeconds}s</p>
+              <p className="text-xs text-muted-foreground mt-3">Breathe and relax</p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Recovery Modal */}
+      <RecoveryModal
+        open={showRecovery}
+        onStart={handleStartBreak}
+        onSkip={handleSkipBreak}
+        onClose={() => setShowRecovery(false)}
+      />
     </div>
   );
 }
