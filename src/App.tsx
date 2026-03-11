@@ -43,6 +43,8 @@ function AppContent() {
               level={state.level}
               onComplete={completeTask}
               onAdd={addTask}
+              onTakeBreak={takeRecoveryBreak}
+              onSkipBreak={skipRecoveryBreak}
             />
           }
         />
