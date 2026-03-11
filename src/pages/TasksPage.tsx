@@ -5,6 +5,7 @@ import { Task } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import WellbeingAvatar from "@/components/WellbeingAvatar";
+import RecoveryModal from "@/components/RecoveryModal";
 import { AvatarMood } from "@/lib/store";
 
 const categoryIcons: Record<Task["category"], React.ReactNode> = {
