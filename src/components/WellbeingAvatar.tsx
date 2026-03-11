@@ -78,24 +78,24 @@ export default function WellbeingAvatar({ mood, xp, level, compact, equippedItem
           </div>
         )}
 
-        {/* Outfits - above avatar */}
-        {equippedOutfits.length > 0 && (
-          <div className="absolute -top-6 left-1/2 -translate-x-1/2 flex gap-1">
-            {equippedOutfits.map(item => (
+        <div className="avatar-glow rounded-full relative">
+          <img src={avatarImages[mood]} alt="Wellbeing Avatar" className="w-32 h-32" />
+
+          {/* Outfits rendered ON the avatar */}
+          {equippedOutfits.map(item => {
+            const pos = outfitPositions[item.id] ?? { top: "10%", left: "50%", transform: "translateX(-50%)", fontSize: "1.75rem" };
+            return (
               <motion.span
                 key={item.id}
-                initial={{ scale: 0, y: 10 }}
-                animate={{ scale: 1, y: 0 }}
-                className="text-2xl"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="absolute pointer-events-none drop-shadow-md"
+                style={pos}
               >
                 {item.icon}
               </motion.span>
-            ))}
-          </div>
-        )}
-
-        <div className="avatar-glow rounded-full">
-          <img src={avatarImages[mood]} alt="Wellbeing Avatar" className="w-32 h-32" />
+            );
+          })}
         </div>
 
         {/* Pets - right side */}
