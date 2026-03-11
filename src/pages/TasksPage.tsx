@@ -171,7 +171,7 @@ export default function TasksPage({ tasks, avatarMood, xp, level, onComplete, on
             Completed ({completed.length})
           </p>
           {completed.map(task => (
-            <TaskRow key={task.id} task={task} onToggle={() => onComplete(task.id)} />
+            <TaskRow key={task.id} task={task} onToggle={() => handleComplete(task.id)} />
           ))}
         </div>
       )}
