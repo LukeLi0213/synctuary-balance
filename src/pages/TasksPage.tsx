@@ -37,10 +37,13 @@ interface Props {
   onSkipBreak: () => void;
 }
 
-export default function TasksPage({ tasks, avatarMood, xp, level, onComplete, onAdd }: Props) {
+export default function TasksPage({ tasks, avatarMood, xp, level, onComplete, onAdd, onTakeBreak, onSkipBreak }: Props) {
   const [showAdd, setShowAdd] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [newCategory, setNewCategory] = useState<Task["category"]>("studying");
+  const [showRecovery, setShowRecovery] = useState(false);
+  const [recoveryTimer, setRecoveryTimer] = useState<number | null>(null);
+  const [timerSeconds, setTimerSeconds] = useState(20);
 
   const handleAdd = () => {
     if (!newTitle.trim()) return;
@@ -48,6 +51,44 @@ export default function TasksPage({ tasks, avatarMood, xp, level, onComplete, on
     setNewTitle("");
     setShowAdd(false);
   };
+
+  const handleComplete = useCallback((id: string) => {
+    const task = tasks.find(t => t.id === id);
+    if (task && !task.completed) {
+      onComplete(id);
+      setShowRecovery(true);
+    } else {
+      onComplete(id);
+    }
+  }, [tasks, onComplete]);
+
+  const handleStartBreak = () => {
+    setShowRecovery(false);
+    setTimerSeconds(20);
+    const interval = window.setInterval(() => {
+      setTimerSeconds(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setRecoveryTimer(null);
+          onTakeBreak();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    setRecoveryTimer(interval);
+  };
+
+  const handleSkipBreak = () => {
+    setShowRecovery(false);
+    onSkipBreak();
+  };
+
+  useEffect(() => {
+    return () => {
+      if (recoveryTimer) clearInterval(recoveryTimer);
+    };
+  }, [recoveryTimer]);
 
   const pending = tasks.filter(t => !t.completed);
   const completed = tasks.filter(t => t.completed);
