@@ -11,6 +11,13 @@ const avatarImages: Record<AvatarMood, string> = {
   calm: avatarCalm,
 };
 
+// Position each outfit item on the avatar body
+const outfitPositions: Record<string, React.CSSProperties> = {
+  scarf: { bottom: "15%", left: "50%", transform: "translateX(-50%)", fontSize: "1.75rem" },
+  sunglasses: { top: "28%", left: "50%", transform: "translateX(-50%)", fontSize: "1.5rem" },
+  crown: { top: "-8%", left: "50%", transform: "translateX(-50%)", fontSize: "2rem" },
+};
+
 interface Props {
   mood: AvatarMood;
   xp: number;
