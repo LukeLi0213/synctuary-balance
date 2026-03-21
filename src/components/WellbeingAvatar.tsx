@@ -49,7 +49,7 @@ export default function WellbeingAvatar({ mood, xp, level, compact, equippedItem
     return (
       <div className="flex items-center gap-3">
         <div className="relative">
-          <img src={avatarImages[mood]} alt="Avatar" className="w-12 h-12" />
+          <img src={currentAvatarImage} alt="Avatar" className="w-12 h-12" />
           {equippedItems.length > 0 && (
             <div className="absolute -bottom-1 -right-1 flex gap-0.5">
               {equippedItems.slice(0, 2).map(item => (
