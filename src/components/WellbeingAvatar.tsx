@@ -38,7 +38,10 @@ export default function WellbeingAvatar({ mood, xp, level, compact, equippedItem
   const prevLevelXP = level > 1 ? [0, 50, 150, 300, 500][Math.min(level - 1, 4)] : 0;
   const progress = ((xp - prevLevelXP) / (nextLevelXP - prevLevelXP)) * 100;
 
-  const equippedOutfits = equippedItems.filter(i => i.type === "outfit");
+  const hasScarf = equippedItems.some(i => i.id === "scarf");
+  const currentAvatarImage = hasScarf ? avatarHappyScarf : avatarImages[mood];
+
+  const equippedOutfits = equippedItems.filter(i => i.type === "outfit" && i.id !== "scarf");
   const equippedPets = equippedItems.filter(i => i.type === "pet");
   const equippedDecorations = equippedItems.filter(i => i.type === "decoration");
 
