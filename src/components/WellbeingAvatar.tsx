@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import avatarHappy from "@/assets/avatar-happy.png";
 import avatarTired from "@/assets/avatar-tired.png";
 import avatarCalm from "@/assets/avatar-calm.png";
+import avatarHappyScarf from "@/assets/avatar-happy-scarf.png";
 import itemScarf from "@/assets/item-scarf.png";
 import { AvatarMood, AvatarItem, getAvatarMessage } from "@/lib/store";
 import { useMemo } from "react";
@@ -37,7 +38,10 @@ export default function WellbeingAvatar({ mood, xp, level, compact, equippedItem
   const prevLevelXP = level > 1 ? [0, 50, 150, 300, 500][Math.min(level - 1, 4)] : 0;
   const progress = ((xp - prevLevelXP) / (nextLevelXP - prevLevelXP)) * 100;
 
-  const equippedOutfits = equippedItems.filter(i => i.type === "outfit");
+  const hasScarf = equippedItems.some(i => i.id === "scarf");
+  const currentAvatarImage = hasScarf ? avatarHappyScarf : avatarImages[mood];
+
+  const equippedOutfits = equippedItems.filter(i => i.type === "outfit" && i.id !== "scarf");
   const equippedPets = equippedItems.filter(i => i.type === "pet");
   const equippedDecorations = equippedItems.filter(i => i.type === "decoration");
 
@@ -45,7 +49,7 @@ export default function WellbeingAvatar({ mood, xp, level, compact, equippedItem
     return (
       <div className="flex items-center gap-3">
         <div className="relative">
-          <img src={avatarImages[mood]} alt="Avatar" className="w-12 h-12" />
+          <img src={currentAvatarImage} alt="Avatar" className="w-12 h-12" />
           {equippedItems.length > 0 && (
             <div className="absolute -bottom-1 -right-1 flex gap-0.5">
               {equippedItems.slice(0, 2).map(item => (
@@ -91,7 +95,7 @@ export default function WellbeingAvatar({ mood, xp, level, compact, equippedItem
         )}
 
         <div className="avatar-glow rounded-full relative">
-          <img src={avatarImages[mood]} alt="Wellbeing Avatar" className="w-32 h-32" />
+          <img src={currentAvatarImage} alt="Wellbeing Avatar" className="w-32 h-32" />
 
           {/* Outfits rendered ON the avatar */}
           {equippedOutfits.map(item => {
