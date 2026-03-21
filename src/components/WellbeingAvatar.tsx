@@ -95,7 +95,7 @@ export default function WellbeingAvatar({ mood, xp, level, compact, equippedItem
         )}
 
         <div className="avatar-glow rounded-full relative">
-          <img src={avatarImages[mood]} alt="Wellbeing Avatar" className="w-32 h-32" />
+          <img src={currentAvatarImage} alt="Wellbeing Avatar" className="w-32 h-32" />
 
           {/* Outfits rendered ON the avatar */}
           {equippedOutfits.map(item => {
