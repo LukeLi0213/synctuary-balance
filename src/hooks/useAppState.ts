@@ -152,6 +152,11 @@ export function useAppState() {
     setCalendarEvents(prev => [...prev, { ...event, id: `custom-${Date.now()}` }]);
   }, []);
 
+  const addCalendarEvents = useCallback((events: Omit<CalendarEvent, "id">[]) => {
+    const newEvents = events.map((e, i) => ({ ...e, id: `ics-${Date.now()}-${i}` }));
+    setCalendarEvents(prev => [...prev, ...newEvents]);
+  }, []);
+
   const deleteCalendarEvent = useCallback((id: string) => {
     setCalendarEvents(prev => prev.filter(e => e.id !== id));
   }, []);
@@ -167,6 +172,8 @@ export function useAppState() {
     purchaseItem,
     equipItem,
     addCalendarEvent,
+    addCalendarEvents,
     deleteCalendarEvent,
+  };
   };
 }
