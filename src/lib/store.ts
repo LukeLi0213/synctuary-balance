@@ -7,6 +7,14 @@ export interface Task {
   category: "studying" | "assignment" | "lab" | "internship" | "sports" | "other";
   completed: boolean;
   completedAt?: Date;
+  folderId?: string; // belongs to a project folder
+}
+
+export interface TaskFolder {
+  id: string;
+  name: string;
+  color: string;
+  collapsed?: boolean;
 }
 
 export interface CheckInData {
@@ -41,6 +49,7 @@ export interface AppState {
   level: number;
   avatarMood: AvatarMood;
   tasks: Task[];
+  folders: TaskFolder[];
   todayCheckIn: CheckInData | null;
   weeklyStats: WeeklyStats;
   recoveryBreaksPending: number;
