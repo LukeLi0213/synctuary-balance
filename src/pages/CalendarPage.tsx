@@ -274,7 +274,7 @@ export default function CalendarPage({
                             : e.type === "recovery"
                             ? "bg-recovery"
                             : e.type === "google"
-                            ? "bg-blue-500"
+                            ? "bg-chart-1"
                             : selected ? "bg-primary-foreground/70" : "bg-accent-foreground/50"
                         }`}
                       />
@@ -366,7 +366,7 @@ export default function CalendarPage({
                           : event.type === "recovery"
                           ? "bg-recovery/10 text-recovery"
                           : event.type === "google"
-                          ? "bg-blue-500/10 text-blue-500"
+                          ? "bg-chart-1/10 text-chart-1"
                           : "bg-accent text-accent-foreground"
                       }`}
                     >
@@ -393,8 +393,8 @@ export default function CalendarPage({
                       </button>
                     )}
                     {event.type === "google" && (
-                      <span className="text-[10px] font-medium text-blue-500 bg-blue-500/10 px-1.5 py-0.5 rounded">
-                        Google
+                      <span className="text-[10px] font-medium text-chart-1 bg-chart-1/10 px-1.5 py-0.5 rounded">
+                        Imported
                       </span>
                     )}
                   </div>
