@@ -17,7 +17,7 @@ import { useAppState } from "@/hooks/useAppState";
 const queryClient = new QueryClient();
 
 function AppContent() {
-  const { state, calendarEvents, completeTask, addTask, submitCheckIn, takeRecoveryBreak, skipRecoveryBreak, purchaseItem, equipItem, addCalendarEvent, addCalendarEvents, updateCalendarEvent, deleteCalendarEvent, toggleCalendarTaskComplete } = useAppState();
+  const { state, calendarEvents, completeTask, addTask, addFolder, deleteFolder, toggleFolderCollapse, submitCheckIn, takeRecoveryBreak, skipRecoveryBreak, purchaseItem, equipItem, addCalendarEvent, addCalendarEvents, updateCalendarEvent, deleteCalendarEvent, toggleCalendarTaskComplete } = useAppState();
 
   return (
     <>
@@ -39,11 +39,15 @@ function AppContent() {
           element={
             <TasksPage
               tasks={state.tasks}
+              folders={state.folders}
               avatarMood={state.avatarMood}
               xp={state.xp}
               level={state.level}
               onComplete={completeTask}
               onAdd={addTask}
+              onAddFolder={addFolder}
+              onDeleteFolder={deleteFolder}
+              onToggleFolder={toggleFolderCollapse}
               onTakeBreak={takeRecoveryBreak}
               onSkipBreak={skipRecoveryBreak}
             />
