@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { AppState, defaultState, getLevelFromXP, Task, CheckInData, AvatarMood } from "@/lib/store";
-import { CalendarEvent } from "@/pages/CalendarPage";
+import { CalendarEvent } from "@/lib/calendarTypes";
 
 export function useAppState() {
   const [state, setState] = useState<AppState>(defaultState);
@@ -157,8 +157,22 @@ export function useAppState() {
     setCalendarEvents(prev => [...prev, ...newEvents]);
   }, []);
 
+  const updateCalendarEvent = useCallback((id: string, updates: Partial<CalendarEvent>) => {
+    setCalendarEvents(prev =>
+      prev.map(e => (e.id === id ? { ...e, ...updates } : e))
+    );
+  }, []);
+
   const deleteCalendarEvent = useCallback((id: string) => {
     setCalendarEvents(prev => prev.filter(e => e.id !== id));
+  }, []);
+
+  const toggleCalendarTaskComplete = useCallback((id: string) => {
+    setCalendarEvents(prev =>
+      prev.map(e =>
+        e.id === id ? { ...e, completed: !e.completed } : e
+      )
+    );
   }, []);
 
   return {
@@ -173,6 +187,8 @@ export function useAppState() {
     equipItem,
     addCalendarEvent,
     addCalendarEvents,
+    updateCalendarEvent,
     deleteCalendarEvent,
+    toggleCalendarTaskComplete,
   };
 }
