@@ -22,7 +22,7 @@ export default function PomodoroTimer() {
     const interval = setInterval(() => {
       setSecondsLeft((prev) => {
         if (prev <= 1) {
-          setRunning(false);
+          // Auto-switch phase and keep running
           setPhase((p) => (p === "work" ? "rest" : "work"));
           return 0;
         }
@@ -32,9 +32,10 @@ export default function PomodoroTimer() {
     return () => clearInterval(interval);
   }, [running]);
 
-  // When phase changes, reset timer
+  // When phase changes, reset timer and auto-start
   useEffect(() => {
     setSecondsLeft(phase === "work" ? WORK_MINUTES * 60 : REST_MINUTES * 60);
+    // Keep running when auto-transitioning (don't stop)
   }, [phase]);
 
   const reset = useCallback(() => {
