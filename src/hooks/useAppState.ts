@@ -1,8 +1,10 @@
 import { useState, useCallback } from "react";
 import { AppState, defaultState, getLevelFromXP, Task, CheckInData, AvatarMood } from "@/lib/store";
+import { CalendarEvent } from "@/pages/CalendarPage";
 
 export function useAppState() {
   const [state, setState] = useState<AppState>(defaultState);
+  const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
 
   const completeTask = useCallback((taskId: string) => {
     setState(prev => {
@@ -146,8 +148,17 @@ export function useAppState() {
     });
   }, []);
 
+  const addCalendarEvent = useCallback((event: Omit<CalendarEvent, "id">) => {
+    setCalendarEvents(prev => [...prev, { ...event, id: `custom-${Date.now()}` }]);
+  }, []);
+
+  const deleteCalendarEvent = useCallback((id: string) => {
+    setCalendarEvents(prev => prev.filter(e => e.id !== id));
+  }, []);
+
   return {
     state,
+    calendarEvents,
     completeTask,
     addTask,
     submitCheckIn,
@@ -155,5 +166,7 @@ export function useAppState() {
     skipRecoveryBreak,
     purchaseItem,
     equipItem,
+    addCalendarEvent,
+    deleteCalendarEvent,
   };
 }

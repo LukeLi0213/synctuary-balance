@@ -9,6 +9,7 @@ import TasksPage from "@/pages/TasksPage";
 import RecoveryPage from "@/pages/RecoveryPage";
 import StatsPage from "@/pages/StatsPage";
 import AvatarPage from "@/pages/AvatarPage";
+import CalendarPage from "@/pages/CalendarPage";
 import ResourcesPage from "@/pages/ResourcesPage";
 import NotFound from "@/pages/NotFound";
 import { useAppState } from "@/hooks/useAppState";
@@ -16,7 +17,7 @@ import { useAppState } from "@/hooks/useAppState";
 const queryClient = new QueryClient();
 
 function AppContent() {
-  const { state, completeTask, addTask, submitCheckIn, takeRecoveryBreak, skipRecoveryBreak, purchaseItem, equipItem } = useAppState();
+  const { state, calendarEvents, completeTask, addTask, submitCheckIn, takeRecoveryBreak, skipRecoveryBreak, purchaseItem, equipItem, addCalendarEvent, deleteCalendarEvent } = useAppState();
 
   return (
     <>
@@ -61,6 +62,18 @@ function AppContent() {
           }
         />
         <Route path="/stats" element={<StatsPage stats={state.weeklyStats} />} />
+        <Route
+          path="/calendar"
+          element={
+            <CalendarPage
+              tasks={state.tasks}
+              recoveryTaken={state.weeklyStats.recoveryTaken}
+              events={calendarEvents}
+              onAddEvent={addCalendarEvent}
+              onDeleteEvent={deleteCalendarEvent}
+            />
+          }
+        />
         <Route
           path="/avatar"
           element={
