@@ -1,4 +1,4 @@
-import { Home, CheckSquare, Timer, BarChart3, Sparkles, CalendarDays } from "lucide-react";
+import { Home, CheckSquare, Timer, BarChart3, Sparkles, CalendarDays, Settings } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
@@ -8,6 +8,7 @@ const navItems = [
   { path: "/recovery", icon: Timer, label: "Recover" },
   { path: "/stats", icon: BarChart3, label: "Stats" },
   { path: "/avatar", icon: Sparkles, label: "Avatar" },
+  { path: "/settings", icon: Settings, label: "Settings" },
 ];
 
 export default function BottomNav() {
