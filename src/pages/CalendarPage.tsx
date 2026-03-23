@@ -136,6 +136,29 @@ export default function CalendarPage({
     setShowAddEvent(false);
   };
 
+  const handleICSUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.name.endsWith(".ics")) {
+      toast.error("Please upload a .ics file");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const content = ev.target?.result as string;
+      const parsed = parseICSFile(content);
+      if (parsed.length === 0) {
+        toast.error("No events found in the .ics file");
+        return;
+      }
+      onAddEvents(parsed);
+      toast.success(`Imported ${parsed.length} event${parsed.length > 1 ? "s" : ""} from calendar`);
+    };
+    reader.readAsText(file);
+    // Reset input so the same file can be re-uploaded
+    e.target.value = "";
+  };
+
   const selectedDayEvents = selectedDate ? getEventsForDay(selectedDate) : [];
 
   const headerLabel =
@@ -145,6 +168,14 @@ export default function CalendarPage({
 
   return (
     <div className="min-h-screen pb-24 px-4 pt-6 max-w-lg mx-auto">
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".ics"
+        onChange={handleICSUpload}
+        className="hidden"
+      />
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
@@ -153,20 +184,30 @@ export default function CalendarPage({
       >
         <div className="flex items-center justify-between mb-4">
           <h1 className="font-display text-2xl font-bold">Calendar</h1>
-          <div className="flex gap-1 bg-secondary rounded-xl p-0.5">
-            {(["week", "month"] as ViewMode[]).map((mode) => (
-              <button
-                key={mode}
-                onClick={() => setViewMode(mode)}
-                className={`px-3 py-1 rounded-lg text-xs font-medium capitalize transition-all ${
-                  viewMode === mode
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {mode}
-              </button>
-            ))}
+          <div className="flex items-center gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              className="rounded-xl gap-1 text-xs"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Upload size={14} /> Import .ics
+            </Button>
+            <div className="flex gap-1 bg-secondary rounded-xl p-0.5">
+              {(["week", "month"] as ViewMode[]).map((mode) => (
+                <button
+                  key={mode}
+                  onClick={() => setViewMode(mode)}
+                  className={`px-3 py-1 rounded-lg text-xs font-medium capitalize transition-all ${
+                    viewMode === mode
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {mode}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -364,13 +405,51 @@ export default function CalendarPage({
         )}
       </AnimatePresence>
 
+      {/* Import Instructions */}
+      <div className="mb-4">
+        <button
+          onClick={() => setShowImportHelp(!showImportHelp)}
+          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors mx-auto"
+        >
+          <Info size={12} />
+          How to import from Google Calendar
+        </button>
+        <AnimatePresence>
+          {showImportHelp && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="glass-card p-4 mt-2 text-xs text-muted-foreground space-y-2">
+                <p className="font-medium text-foreground flex items-center gap-1.5">
+                  <FileUp size={14} /> Import your Google Calendar events
+                </p>
+                <ol className="list-decimal list-inside space-y-1.5 ml-1">
+                  <li>Open <span className="font-medium text-foreground">Google Calendar</span> on your computer</li>
+                  <li>Click the <span className="font-medium text-foreground">⚙️ Settings</span> gear icon → <span className="font-medium text-foreground">Settings</span></li>
+                  <li>In the left sidebar, click <span className="font-medium text-foreground">Import & Export</span></li>
+                  <li>Click <span className="font-medium text-foreground">Export</span> — this downloads a .zip file</li>
+                  <li>Unzip the file to find your <span className="font-medium text-foreground">.ics</span> calendar files</li>
+                  <li>Click <span className="font-medium text-foreground">"Import .ics"</span> above and select the .ics file</li>
+                </ol>
+                <p className="text-[10px] italic pt-1 border-t border-border">
+                  💡 Tip: You can also export a single calendar by going to its settings and clicking "Export this calendar."
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
       {/* Legend */}
       <div className="flex flex-wrap gap-3 justify-center">
         {[
           { label: "Tasks", color: "bg-primary" },
           { label: "Recovery", color: "bg-recovery" },
           { label: "Custom", color: "bg-accent-foreground/50" },
-          { label: "Google", color: "bg-blue-500" },
+          { label: "Imported", color: "bg-chart-1" },
         ].map(({ label, color }) => (
           <div key={label} className="flex items-center gap-1.5">
             <div className={`w-2 h-2 rounded-full ${color}`} />
