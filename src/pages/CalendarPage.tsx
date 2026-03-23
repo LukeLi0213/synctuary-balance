@@ -441,6 +441,21 @@ export default function CalendarPage({
                   🔁 Repeats {selectedEvent.recurrence.frequency}
                 </p>
               )}
+              {selectedEvent.type === "task" && (
+                <div className="mb-3">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl gap-1.5 w-full"
+                    onClick={() => {
+                      onToggleTaskComplete(selectedEvent.id);
+                      setSelectedEvent({ ...selectedEvent, completed: !selectedEvent.completed });
+                    }}
+                  >
+                    {selectedEvent.completed ? "☑ Completed" : "☐ Mark as complete"}
+                  </Button>
+                </div>
+              )}
               <div className="flex justify-end gap-2 pt-2 border-t border-border">
                 <Button
                   variant="destructive"
