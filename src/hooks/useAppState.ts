@@ -175,5 +175,4 @@ export function useAppState() {
     addCalendarEvents,
     deleteCalendarEvent,
   };
-  };
 }
