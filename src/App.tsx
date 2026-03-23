@@ -11,8 +11,10 @@ import StatsPage from "@/pages/StatsPage";
 import AvatarPage from "@/pages/AvatarPage";
 import CalendarPage from "@/pages/CalendarPage";
 import ResourcesPage from "@/pages/ResourcesPage";
+import SettingsPage from "@/pages/SettingsPage";
 import NotFound from "@/pages/NotFound";
 import { useAppState } from "@/hooks/useAppState";
+import { ThemeProvider } from "@/hooks/useThemeSettings";
 
 const queryClient = new QueryClient();
 
