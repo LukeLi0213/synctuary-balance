@@ -17,7 +17,7 @@ import { useAppState } from "@/hooks/useAppState";
 const queryClient = new QueryClient();
 
 function AppContent() {
-  const { state, calendarEvents, completeTask, addTask, submitCheckIn, takeRecoveryBreak, skipRecoveryBreak, purchaseItem, equipItem, addCalendarEvent, deleteCalendarEvent } = useAppState();
+  const { state, calendarEvents, completeTask, addTask, submitCheckIn, takeRecoveryBreak, skipRecoveryBreak, purchaseItem, equipItem, addCalendarEvent, addCalendarEvents, deleteCalendarEvent } = useAppState();
 
   return (
     <>
@@ -70,6 +70,7 @@ function AppContent() {
               recoveryTaken={state.weeklyStats.recoveryTaken}
               events={calendarEvents}
               onAddEvent={addCalendarEvent}
+              onAddEvents={addCalendarEvents}
               onDeleteEvent={deleteCalendarEvent}
             />
           }
