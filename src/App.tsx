@@ -12,14 +12,26 @@ import AvatarPage from "@/pages/AvatarPage";
 import CalendarPage from "@/pages/CalendarPage";
 import ResourcesPage from "@/pages/ResourcesPage";
 import SettingsPage from "@/pages/SettingsPage";
+import AuthPage from "@/pages/AuthPage";
+import GroupPage from "@/pages/GroupPage";
 import NotFound from "@/pages/NotFound";
 import { useAppState } from "@/hooks/useAppState";
 import { ThemeProvider } from "@/hooks/useThemeSettings";
+import { AuthProvider, useAuth } from "@/hooks/useAuth";
 
 const queryClient = new QueryClient();
 
 function AppContent() {
+  const { user, loading } = useAuth();
   const { state, calendarEvents, completeTask, addTask, addFolder, deleteFolder, toggleFolderCollapse, submitCheckIn, takeRecoveryBreak, skipRecoveryBreak, purchaseItem, equipItem, addCalendarEvent, addCalendarEvents, updateCalendarEvent, deleteCalendarEvent, toggleCalendarTaskComplete } = useAppState();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-pulse-soft text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -98,6 +110,8 @@ function AppContent() {
         />
         <Route path="/resources" element={<ResourcesPage />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/group" element={user ? <GroupPage /> : <AuthPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <BottomNav />
@@ -107,13 +121,15 @@ function AppContent() {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <TooltipProvider>
-        <BrowserRouter>
-          <AppContent />
-        </BrowserRouter>
-      </TooltipProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <TooltipProvider>
+          <BrowserRouter>
+            <AppContent />
+          </BrowserRouter>
+        </TooltipProvider>
+      </ThemeProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
