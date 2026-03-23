@@ -70,6 +70,7 @@ function AppContent() {
               recoveryTaken={state.weeklyStats.recoveryTaken}
               events={calendarEvents}
               onAddEvent={addCalendarEvent}
+              onAddEvents={addCalendarEvents}
               onDeleteEvent={deleteCalendarEvent}
             />
           }
