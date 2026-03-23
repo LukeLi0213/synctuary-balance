@@ -69,6 +69,15 @@ export const defaultInventory: AvatarItem[] = [
   { id: "lantern", name: "Calm Lantern", type: "decoration", icon: "🏮", xpRequired: 250, unlocked: false, owned: false, equipped: false },
 ];
 
+export const FOLDER_COLORS = [
+  "hsl(145, 30%, 42%)",
+  "hsl(36, 80%, 56%)",
+  "hsl(200, 60%, 50%)",
+  "hsl(270, 40%, 60%)",
+  "hsl(350, 55%, 55%)",
+  "hsl(175, 45%, 42%)",
+];
+
 export const defaultState: AppState = {
   xp: 85,
   level: 2,
@@ -76,9 +85,14 @@ export const defaultState: AppState = {
   tasks: [
     { id: "1", title: "Organic Chemistry Chapter 5", category: "studying", completed: false },
     { id: "2", title: "CS Problem Set #3", category: "assignment", completed: true, completedAt: new Date() },
-    { id: "3", title: "Bio Lab Report", category: "lab", completed: false },
+    { id: "3", title: "Bio Lab Report - Collect Data", category: "lab", completed: false, folderId: "folder-1" },
+    { id: "3b", title: "Bio Lab Report - Write Methods", category: "lab", completed: false, folderId: "folder-1" },
+    { id: "3c", title: "Bio Lab Report - Draft Conclusion", category: "lab", completed: false, folderId: "folder-1" },
     { id: "4", title: "Resume for Summer Internship", category: "internship", completed: false },
     { id: "5", title: "Track Practice", category: "sports", completed: true, completedAt: new Date() },
+  ],
+  folders: [
+    { id: "folder-1", name: "Bio Lab Report", color: "hsl(200, 60%, 50%)" },
   ],
   todayCheckIn: null,
   weeklyStats: {
