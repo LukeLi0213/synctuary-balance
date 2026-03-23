@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { AppState, defaultState, getLevelFromXP, Task, CheckInData, AvatarMood } from "@/lib/store";
-import { CalendarEvent } from "@/pages/CalendarPage";
+import { CalendarEvent } from "@/lib/calendarTypes";
 
 export function useAppState() {
   const [state, setState] = useState<AppState>(defaultState);

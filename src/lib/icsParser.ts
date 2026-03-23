@@ -1,4 +1,4 @@
-import { CalendarEvent } from "@/pages/CalendarPage";
+import { CalendarEvent } from "@/lib/calendarTypes";
 
 /**
  * Parse an .ics file string into CalendarEvent objects.
