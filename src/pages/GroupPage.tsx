@@ -108,8 +108,11 @@ export default function GroupPage() {
     setLoading(false);
   };
 
+  const [creating, setCreating] = useState(false);
+
   const createGroup = async () => {
-    if (!newGroupName.trim()) return;
+    if (!newGroupName.trim() || creating) return;
+    setCreating(true);
     const { data: group, error } = await supabase
       .from("groups")
       .insert({ name: newGroupName.trim(), created_by: user!.id })
@@ -118,6 +121,7 @@ export default function GroupPage() {
 
     if (error) {
       toast.error("Failed to create group");
+      setCreating(false);
       return;
     }
 
