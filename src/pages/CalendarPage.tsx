@@ -134,21 +134,14 @@ export default function CalendarPage({
   const handleEventClick = useCallback(
     (clickInfo: EventClickArg) => {
       const id = clickInfo.event.id;
-      // If it's a Synctuary task, ignore
       if (id.startsWith("synctask-")) return;
 
       const ev = events.find((e) => e.id === id);
       if (!ev) return;
 
-      // If it's a task, toggle completion on click
-      if (ev.type === "task") {
-        onToggleTaskComplete(id);
-        return;
-      }
-
       setSelectedEvent(ev);
     },
-    [events, onToggleTaskComplete]
+    [events]
   );
 
   const handleEventDrop = useCallback(
@@ -286,25 +279,34 @@ export default function CalendarPage({
             const props = arg.event.extendedProps;
             const isTask = props.type === "task";
             const isCompleted = props.completed;
+            const isTimeGrid = arg.view.type.startsWith("timeGrid");
+
             return (
-              <div className="flex items-center gap-1 px-1 py-0.5 overflow-hidden w-full">
-                {isTask && (
-                  <span className="flex-shrink-0 text-[10px]">
-                    {isCompleted ? "☑" : "☐"}
-                  </span>
-                )}
-                <span
-                  className={`text-[11px] font-medium truncate ${
-                    isCompleted ? "line-through opacity-60" : ""
-                  }`}
-                >
-                  {arg.timeText && (
-                    <span className="font-normal opacity-80 mr-1">
-                      {arg.timeText}
+              <div className="flex flex-col px-1.5 py-1 overflow-hidden w-full h-full">
+                <div className="flex items-center gap-1">
+                  {isTask && (
+                    <span className="flex-shrink-0 text-[10px]">
+                      {isCompleted ? "☑" : "☐"}
                     </span>
                   )}
-                  {arg.event.title}
-                </span>
+                  <span
+                    className={`text-[11px] font-semibold truncate leading-tight ${
+                      isCompleted ? "line-through opacity-60" : ""
+                    }`}
+                  >
+                    {arg.event.title}
+                  </span>
+                </div>
+                {arg.timeText && (
+                  <span className="text-[9px] opacity-70 leading-tight mt-0.5">
+                    {arg.timeText}
+                  </span>
+                )}
+                {isTimeGrid && props.location && (
+                  <span className="text-[9px] opacity-60 leading-tight truncate mt-0.5">
+                    📍 {props.location}
+                  </span>
+                )}
               </div>
             );
           }}
@@ -438,6 +440,21 @@ export default function CalendarPage({
                 <p className="text-[10px] text-primary font-medium mb-3">
                   🔁 Repeats {selectedEvent.recurrence.frequency}
                 </p>
+              )}
+              {selectedEvent.type === "task" && (
+                <div className="mb-3">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl gap-1.5 w-full"
+                    onClick={() => {
+                      onToggleTaskComplete(selectedEvent.id);
+                      setSelectedEvent({ ...selectedEvent, completed: !selectedEvent.completed });
+                    }}
+                  >
+                    {selectedEvent.completed ? "☑ Completed" : "☐ Mark as complete"}
+                  </Button>
+                </div>
               )}
               <div className="flex justify-end gap-2 pt-2 border-t border-border">
                 <Button
