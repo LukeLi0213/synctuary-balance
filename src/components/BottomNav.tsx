@@ -1,9 +1,10 @@
-import { Home, CheckSquare, Timer, BarChart3, Sparkles } from "lucide-react";
+import { Home, CheckSquare, Timer, BarChart3, Sparkles, CalendarDays } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
   { path: "/", icon: Home, label: "Home" },
   { path: "/tasks", icon: CheckSquare, label: "Tasks" },
+  { path: "/calendar", icon: CalendarDays, label: "Calendar" },
   { path: "/recovery", icon: Timer, label: "Recover" },
   { path: "/stats", icon: BarChart3, label: "Stats" },
   { path: "/avatar", icon: Sparkles, label: "Avatar" },
