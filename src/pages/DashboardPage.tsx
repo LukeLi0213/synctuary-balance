@@ -5,6 +5,7 @@ import DailyCheckIn from "@/components/DailyCheckIn";
 import { AppState, CheckInData } from "@/lib/store";
 import { CheckSquare, Timer, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import logo from "@/assets/logo.png";
 
 interface Props {
   state: AppState;
@@ -26,9 +27,12 @@ export default function DashboardPage({ state, onCompleteTask, onCheckIn }: Prop
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center justify-between mb-6"
       >
-        <div>
-          <h1 className="font-display text-2xl font-bold">Synctuary</h1>
-          <p className="text-sm text-muted-foreground">Protect your balance</p>
+        <div className="flex items-center gap-3">
+          <img src={logo} alt="Synctuary logo" width={40} height={40} className="rounded-full" />
+          <div>
+            <h1 className="font-display text-2xl font-bold">Synctuary</h1>
+            <p className="text-sm text-muted-foreground">Protect your balance</p>
+          </div>
         </div>
         <div className="text-right">
           <p className="text-xs text-muted-foreground">

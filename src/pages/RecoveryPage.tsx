@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import WellbeingAvatar from "@/components/WellbeingAvatar";
 import { AvatarMood } from "@/lib/store";
+import logo from "@/assets/logo.png";
 
 interface Props {
   avatarMood: AvatarMood;
@@ -73,8 +74,8 @@ export default function RecoveryPage({ avatarMood, xp, level, onTakeBreak, onSki
             exit={{ opacity: 0, scale: 0.95 }}
             className="glass-card-elevated p-8 text-center w-full max-w-sm"
           >
-            <div className="w-16 h-16 rounded-2xl bg-recovery/10 flex items-center justify-center mx-auto mb-5">
-              <Shield size={32} className="text-recovery" />
+            <div className="w-16 h-16 rounded-full overflow-hidden mx-auto mb-5">
+              <img src={logo} alt="Synctuary" width={64} height={64} />
             </div>
             <h1 className="font-display text-2xl font-bold mb-2">Recovery Time</h1>
             <p className="text-sm text-muted-foreground mb-1">
