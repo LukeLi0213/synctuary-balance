@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronLeft,
@@ -8,10 +8,15 @@ import {
   CheckSquare,
   Shield,
   Clock,
+  Upload,
+  Info,
+  FileUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Task } from "@/lib/store";
+import { parseICSFile } from "@/lib/icsParser";
+import { toast } from "sonner";
 import {
   format,
   startOfWeek,
@@ -42,6 +47,7 @@ interface Props {
   recoveryTaken: number;
   events: CalendarEvent[];
   onAddEvent: (event: Omit<CalendarEvent, "id">) => void;
+  onAddEvents: (events: Omit<CalendarEvent, "id">[]) => void;
   onDeleteEvent: (id: string) => void;
 }
 
@@ -52,6 +58,7 @@ export default function CalendarPage({
   recoveryTaken,
   events,
   onAddEvent,
+  onAddEvents,
   onDeleteEvent,
 }: Props) {
   const [viewMode, setViewMode] = useState<ViewMode>("week");
@@ -60,6 +67,8 @@ export default function CalendarPage({
   const [showAddEvent, setShowAddEvent] = useState(false);
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventTime, setNewEventTime] = useState("12:00");
+  const [showImportHelp, setShowImportHelp] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Combine tasks and custom events
   const allEvents = useMemo(() => {
