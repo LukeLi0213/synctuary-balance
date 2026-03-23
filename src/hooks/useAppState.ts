@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { AppState, defaultState, getLevelFromXP, Task, CheckInData, AvatarMood } from "@/lib/store";
+import { AppState, defaultState, getLevelFromXP, Task, TaskFolder, CheckInData, AvatarMood } from "@/lib/store";
 import { CalendarEvent } from "@/lib/calendarTypes";
 
 export function useAppState() {
@@ -40,10 +40,35 @@ export function useAppState() {
     });
   }, []);
 
-  const addTask = useCallback((title: string, category: Task["category"]) => {
+  const addTask = useCallback((title: string, category: Task["category"], folderId?: string) => {
     setState(prev => ({
       ...prev,
-      tasks: [...prev.tasks, { id: Date.now().toString(), title, category, completed: false }],
+      tasks: [...prev.tasks, { id: Date.now().toString(), title, category, completed: false, folderId }],
+    }));
+  }, []);
+
+  const addFolder = useCallback((name: string, color: string) => {
+    setState(prev => ({
+      ...prev,
+      folders: [...prev.folders, { id: `folder-${Date.now()}`, name, color }],
+    }));
+  }, []);
+
+  const deleteFolder = useCallback((folderId: string) => {
+    setState(prev => ({
+      ...prev,
+      folders: prev.folders.filter(f => f.id !== folderId),
+      // Move folder tasks to unfiled
+      tasks: prev.tasks.map(t => t.folderId === folderId ? { ...t, folderId: undefined } : t),
+    }));
+  }, []);
+
+  const toggleFolderCollapse = useCallback((folderId: string) => {
+    setState(prev => ({
+      ...prev,
+      folders: prev.folders.map(f =>
+        f.id === folderId ? { ...f, collapsed: !f.collapsed } : f
+      ),
     }));
   }, []);
 
@@ -180,6 +205,9 @@ export function useAppState() {
     calendarEvents,
     completeTask,
     addTask,
+    addFolder,
+    deleteFolder,
+    toggleFolderCollapse,
     submitCheckIn,
     takeRecoveryBreak,
     skipRecoveryBreak,
