@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import WellbeingAvatar from "@/components/WellbeingAvatar";
 import EnergyIndicator from "@/components/EnergyIndicator";
 import DailyCheckIn from "@/components/DailyCheckIn";
+import PomodoroTimer from "@/components/PomodoroTimer";
 import { AppState, CheckInData } from "@/lib/store";
 import { CheckSquare, Timer, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -54,6 +55,11 @@ export default function DashboardPage({ state, onCompleteTask, onCheckIn }: Prop
       {/* Energy Indicator */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
         <EnergyIndicator balanceScore={state.weeklyStats.balanceScore} />
+      </motion.div>
+
+      {/* Pomodoro Timer */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="mt-4">
+        <PomodoroTimer />
       </motion.div>
 
       {/* Recovery Alert */}
