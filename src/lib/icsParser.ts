@@ -23,14 +23,19 @@ export function parseICSFile(icsContent: string): Omit<CalendarEvent, "id">[] {
       dtend = "";
     } else if (trimmed === "END:VEVENT") {
       if (inEvent && summary && dtstart) {
-        const date = parseICSDate(dtstart);
-        if (date) {
-          const time = extractTime(dtstart);
+        const startDate = parseICSDate(dtstart);
+        if (startDate) {
+          const endDate = dtend ? parseICSDate(dtend) : startDate;
+          const hasTime = dtstart.includes("T");
           events.push({
             title: summary,
-            date,
-            type: "google",
-            time: time || undefined,
+            start: startDate,
+            end: endDate || startDate,
+            allDay: !hasTime,
+            type: "imported",
+            color: "hsl(200, 60%, 50%)",
+            completed: false,
+            recurrence: null,
           });
         }
       }
@@ -54,7 +59,7 @@ function unfoldLines(text: string): string[] {
   return text.replace(/\r\n /g, "").replace(/\r\n\t/g, "").split(/\r?\n/);
 }
 
-/** Extract value after the last colon (handles params like DTSTART;TZID=...:20240101T090000) */
+/** Extract value after the last colon */
 function extractValue(line: string): string {
   const colonIdx = line.lastIndexOf(":");
   return colonIdx >= 0 ? line.substring(colonIdx + 1).trim() : line.trim();
@@ -65,13 +70,11 @@ function parseICSDate(value: string): Date | null {
   try {
     const clean = value.replace("Z", "");
     if (clean.length === 8) {
-      // All-day event: 20240315
       const year = parseInt(clean.substring(0, 4));
       const month = parseInt(clean.substring(4, 6)) - 1;
       const day = parseInt(clean.substring(6, 8));
       return new Date(year, month, day);
     } else if (clean.length >= 15) {
-      // Date-time: 20240315T090000
       const year = parseInt(clean.substring(0, 4));
       const month = parseInt(clean.substring(4, 6)) - 1;
       const day = parseInt(clean.substring(6, 8));
@@ -83,15 +86,4 @@ function parseICSDate(value: string): Date | null {
   } catch {
     return null;
   }
-}
-
-/** Extract HH:MM time string from ICS date-time */
-function extractTime(value: string): string | null {
-  const clean = value.replace("Z", "");
-  if (clean.length >= 15 && clean.includes("T")) {
-    const hour = clean.substring(9, 11);
-    const minute = clean.substring(11, 13);
-    return `${hour}:${minute}`;
-  }
-  return null;
 }
