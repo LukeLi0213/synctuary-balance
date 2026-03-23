@@ -24,7 +24,7 @@ export default function PomodoroTimer() {
         if (prev <= 1) {
           setRunning(false);
           setPhase((p) => (p === "work" ? "rest" : "work"));
-          return p => p; // will be set by phase change
+          return 0;
         }
         return prev - 1;
       });
