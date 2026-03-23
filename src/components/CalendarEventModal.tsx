@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, MapPin, AlignLeft, Repeat, Clock, CheckSquare, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -36,6 +36,23 @@ export default function CalendarEventModal({
   const [color, setColor] = useState(EVENT_COLORS[0].value);
   const [recurrence, setRecurrence] = useState<RecurrenceRule["frequency"] | "none">("none");
   const [showMore, setShowMore] = useState(false);
+
+  // Sync state when modal opens with new defaults
+  useEffect(() => {
+    if (open) {
+      setStartDate(format(defaultStart, "yyyy-MM-dd"));
+      setStartTime(format(defaultStart, "HH:mm"));
+      setEndDate(format(defaultEnd, "yyyy-MM-dd"));
+      setEndTime(format(defaultEnd, "HH:mm"));
+      setAllDay(defaultAllDay);
+      setTitle("");
+      setLocation("");
+      setDescription("");
+      setRecurrence("none");
+      setShowMore(false);
+      setItemType("event");
+    }
+  }, [open, defaultStart, defaultEnd, defaultAllDay]);
 
   const handleSave = () => {
     if (!title.trim()) return;
