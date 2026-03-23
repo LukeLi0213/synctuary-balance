@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, RotateCcw, Check, X, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 import WellbeingAvatar from "@/components/WellbeingAvatar";
 import { AvatarMood } from "@/lib/store";
 
@@ -17,7 +18,8 @@ type Phase = "prompt" | "timer" | "report" | "done";
 
 export default function RecoveryPage({ avatarMood, xp, level, onTakeBreak, onSkipBreak }: Props) {
   const [phase, setPhase] = useState<Phase>("prompt");
-  const [timeLeft, setTimeLeft] = useState(20 * 60); // 20 min
+  const [durationMinutes, setDurationMinutes] = useState(20);
+  const [timeLeft, setTimeLeft] = useState(20 * 60);
   const [running, setRunning] = useState(false);
   const [reportAnswer, setReportAnswer] = useState<boolean | null>(null);
 
@@ -43,6 +45,7 @@ export default function RecoveryPage({ avatarMood, xp, level, onTakeBreak, onSki
   };
 
   const handleStart = () => {
+    setTimeLeft(durationMinutes * 60);
     setPhase("timer");
     setRunning(true);
   };
@@ -77,9 +80,23 @@ export default function RecoveryPage({ avatarMood, xp, level, onTakeBreak, onSki
             <p className="text-sm text-muted-foreground mb-1">
               You've completed focused work. Time to recharge.
             </p>
-            <p className="text-sm font-medium text-primary mb-6">
-              Take a 20-minute recovery break.
+            <p className="text-sm font-medium text-primary mb-2">
+              Take a {durationMinutes}-minute recovery break.
             </p>
+            <div className="w-full px-2 mb-4">
+              <Slider
+                value={[durationMinutes]}
+                onValueChange={([v]) => setDurationMinutes(v)}
+                min={5}
+                max={20}
+                step={1}
+                className="w-full"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                <span>5 min</span>
+                <span>20 min</span>
+              </div>
+            </div>
             <p className="text-xs text-muted-foreground italic mb-6">
               This is not a reward — it's protecting your performance.
             </p>
@@ -114,7 +131,7 @@ export default function RecoveryPage({ avatarMood, xp, level, onTakeBreak, onSki
               <div className="w-full h-2 bg-secondary rounded-full overflow-hidden mb-6">
                 <motion.div
                   className="h-full bg-recovery rounded-full"
-                  style={{ width: `${((20 * 60 - timeLeft) / (20 * 60)) * 100}%` }}
+                  style={{ width: `${((durationMinutes * 60 - timeLeft) / (durationMinutes * 60)) * 100}%` }}
                 />
               </div>
 
@@ -131,7 +148,7 @@ export default function RecoveryPage({ avatarMood, xp, level, onTakeBreak, onSki
                   variant="outline"
                   size="icon"
                   className="rounded-xl"
-                  onClick={() => { setTimeLeft(20 * 60); setRunning(false); }}
+                  onClick={() => { setTimeLeft(durationMinutes * 60); setRunning(false); }}
                 >
                   <RotateCcw size={18} />
                 </Button>
@@ -185,7 +202,7 @@ export default function RecoveryPage({ avatarMood, xp, level, onTakeBreak, onSki
                   : "That's okay. Try to protect your next recovery break."}
               </p>
               <Button
-                onClick={() => { setPhase("prompt"); setTimeLeft(20 * 60); setReportAnswer(null); }}
+                onClick={() => { setPhase("prompt"); setDurationMinutes(20); setTimeLeft(20 * 60); setReportAnswer(null); }}
                 variant="outline"
                 className="mt-4 rounded-xl"
               >

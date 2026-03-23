@@ -1,15 +1,19 @@
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 
 interface Props {
   open: boolean;
-  onStart: () => void;
+  onStart: (minutes: number) => void;
   onSkip: () => void;
   onClose: () => void;
 }
 
 export default function RecoveryModal({ open, onStart, onSkip, onClose }: Props) {
+  const [minutes, setMinutes] = useState(20);
+
   return (
     <AnimatePresence>
       {open && (
@@ -37,12 +41,27 @@ export default function RecoveryModal({ open, onStart, onSkip, onClose }: Props)
             <p className="text-sm text-muted-foreground mb-1">
               You've completed focused work. Your body and mind need recovery.
             </p>
-            <p className="text-sm font-medium text-primary mb-6">
-              Take a 20-minute recovery break.
+            <p className="text-sm font-medium text-primary mb-4">
+              Take a {minutes}-minute recovery break.
             </p>
 
+            <div className="w-full px-2 mb-6">
+              <Slider
+                value={[minutes]}
+                onValueChange={([v]) => setMinutes(v)}
+                min={5}
+                max={20}
+                step={1}
+                className="w-full"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                <span>5 min</span>
+                <span>20 min</span>
+              </div>
+            </div>
+
             <div className="space-y-2">
-              <Button onClick={onStart} className="w-full rounded-xl">
+              <Button onClick={() => onStart(minutes)} className="w-full rounded-xl">
                 Start Recovery Break
               </Button>
               <Button onClick={onSkip} variant="ghost" className="w-full rounded-xl text-muted-foreground">
