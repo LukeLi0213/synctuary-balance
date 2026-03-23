@@ -202,18 +202,7 @@ export default function CalendarPage({
         toast.error("No events found in the .ics file");
         return;
       }
-      // Convert old format to new format
-      const newEvents: Omit<CalendarEvent, "id">[] = parsed.map((p) => ({
-        title: p.title,
-        start: p.date,
-        end: p.date,
-        allDay: !p.time,
-        type: "imported" as const,
-        color: EVENT_COLORS[2].value, // Sky blue for imported
-        completed: false,
-        recurrence: null,
-      }));
-      onAddEvents(newEvents);
+      onAddEvents(parsed);
       toast.success(
         `Imported ${parsed.length} event${parsed.length > 1 ? "s" : ""}`
       );
