@@ -131,6 +131,7 @@ export default function GroupPage() {
     toast.success("Group created!");
     setNewGroupName("");
     setShowCreate(false);
+    setCreating(false);
     loadGroups();
   };
 
