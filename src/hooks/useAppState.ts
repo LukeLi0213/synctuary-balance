@@ -16,6 +16,7 @@ export function useAppState() {
       xp: newState.xp,
       level: newState.level,
       avatar_mood: newState.avatarMood,
+      avatar_name: newState.avatarName,
       tasks_completed: newState.weeklyStats.tasksCompleted,
       recovery_taken: newState.weeklyStats.recoveryTaken,
       balance_score: newState.weeklyStats.balanceScore,
