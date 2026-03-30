@@ -48,6 +48,7 @@ export interface AppState {
   xp: number;
   level: number;
   avatarMood: AvatarMood;
+  avatarName: string;
   tasks: Task[];
   folders: TaskFolder[];
   todayCheckIn: CheckInData | null;
