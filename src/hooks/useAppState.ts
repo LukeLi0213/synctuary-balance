@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef } from "react"; // refreshed
 import { AppState, defaultState, getLevelFromXP, Task, TaskFolder, CheckInData, AvatarMood } from "@/lib/store";
 import { CalendarEvent } from "@/lib/calendarTypes";
 import { supabase } from "@/integrations/supabase/client";
