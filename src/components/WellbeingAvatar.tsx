@@ -30,6 +30,8 @@ interface Props {
   level: number;
   compact?: boolean;
   equippedItems?: AvatarItem[];
+  avatarName?: string;
+  onNameChange?: (name: string) => void;
 }
 
 export default function WellbeingAvatar({ mood, xp, level, compact, equippedItems = [] }: Props) {
