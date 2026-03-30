@@ -48,6 +48,7 @@ function AppContent() {
               state={state}
               onCompleteTask={completeTask}
               onCheckIn={submitCheckIn}
+              onAvatarNameChange={setAvatarName}
             />
           }
         />
