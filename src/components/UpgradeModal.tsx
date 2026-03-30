@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Crown, Calendar, Users, Palette } from "lucide-react";
+import { Crown, Calendar, Users, Palette, Check, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -13,10 +13,10 @@ interface UpgradeModalProps {
   feature?: string;
 }
 
-const FEATURES = [
-  { icon: Calendar, label: "Full Calendar with .ics import" },
-  { icon: Users, label: "Social Groups & Accountability" },
-  { icon: Palette, label: "Color Palettes & Font Customization" },
+const PRO_FEATURES = [
+  { icon: Calendar, label: "Calendar use & incorporation of Google Calendar (.ics import)" },
+  { icon: Users, label: "See what your friends are doing in the Group function" },
+  { icon: Palette, label: "Customizable themes — fonts, color palettes, and font sizes" },
 ];
 
 export default function UpgradeModal({ open, onOpenChange, feature }: UpgradeModalProps) {
@@ -58,17 +58,28 @@ export default function UpgradeModal({ open, onOpenChange, feature }: UpgradeMod
               : "Unlock all premium features for $5/month."}
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-3 py-3">
-          {FEATURES.map(({ icon: Icon, label }) => (
-            <div key={label} className="flex items-center gap-3 text-sm text-foreground">
-              <Icon size={18} className="text-primary shrink-0" />
+
+        <div className="space-y-2 py-3">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">What's included</p>
+          {PRO_FEATURES.map(({ icon: Icon, label }) => (
+            <div key={label} className="flex items-start gap-3 text-sm text-foreground">
+              <div className="mt-0.5 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                <Check size={12} className="text-primary" />
+              </div>
               <span>{label}</span>
             </div>
           ))}
         </div>
+
         <Button onClick={handleUpgrade} disabled={loading} className="w-full" size="lg">
           {loading ? "Opening checkout…" : "Upgrade — $5/month"}
         </Button>
+
+        <div className="flex items-center justify-center gap-1.5 pt-1 text-xs text-muted-foreground">
+          <Mail size={12} />
+          <span>Questions or refunds?</span>
+          <a href="mailto:synctuary0@gmail.com" className="text-primary hover:underline">synctuary0@gmail.com</a>
+        </div>
       </DialogContent>
     </Dialog>
   );
