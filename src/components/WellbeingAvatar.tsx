@@ -3,6 +3,7 @@ import avatarHappy from "@/assets/avatar-happy.png";
 import avatarTired from "@/assets/avatar-tired.png";
 import avatarCalm from "@/assets/avatar-calm.png";
 import avatarHappyScarf from "@/assets/avatar-happy-scarf.png";
+import avatarHappySunglasses from "@/assets/avatar-happy-sunglasses.png";
 import itemScarf from "@/assets/item-scarf.png";
 import { AvatarMood, AvatarItem, getAvatarMessage } from "@/lib/store";
 import { useMemo, useState } from "react";
