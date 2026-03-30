@@ -12,9 +12,10 @@ interface Props {
   state: AppState;
   onCompleteTask: (id: string) => void;
   onCheckIn: (data: Omit<CheckInData, "date">) => void;
+  onAvatarNameChange: (name: string) => void;
 }
 
-export default function DashboardPage({ state, onCompleteTask, onCheckIn }: Props) {
+export default function DashboardPage({ state, onCompleteTask, onCheckIn, onAvatarNameChange }: Props) {
   const navigate = useNavigate();
   const todayTasks = state.tasks;
   const completedCount = todayTasks.filter(t => t.completed).length;
@@ -49,7 +50,7 @@ export default function DashboardPage({ state, onCompleteTask, onCheckIn }: Prop
         transition={{ delay: 0.1 }}
         className="glass-card-elevated p-6 mb-4"
       >
-        <WellbeingAvatar mood={state.avatarMood} xp={state.xp} level={state.level} />
+        <WellbeingAvatar mood={state.avatarMood} xp={state.xp} level={state.level} avatarName={state.avatarName} onNameChange={onAvatarNameChange} />
       </motion.div>
 
       {/* Energy Indicator */}

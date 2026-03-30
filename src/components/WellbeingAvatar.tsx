@@ -5,7 +5,8 @@ import avatarCalm from "@/assets/avatar-calm.png";
 import avatarHappyScarf from "@/assets/avatar-happy-scarf.png";
 import itemScarf from "@/assets/item-scarf.png";
 import { AvatarMood, AvatarItem, getAvatarMessage } from "@/lib/store";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { Pencil } from "lucide-react";
 
 const avatarImages: Record<AvatarMood, string> = {
   happy: avatarHappy,
@@ -30,9 +31,13 @@ interface Props {
   level: number;
   compact?: boolean;
   equippedItems?: AvatarItem[];
+  avatarName?: string;
+  onNameChange?: (name: string) => void;
 }
 
-export default function WellbeingAvatar({ mood, xp, level, compact, equippedItems = [] }: Props) {
+export default function WellbeingAvatar({ mood, xp, level, compact, equippedItems = [], avatarName, onNameChange }: Props) {
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [nameInput, setNameInput] = useState(avatarName || "");
   const message = useMemo(() => getAvatarMessage(mood), [mood]);
   const nextLevelXP = [50, 150, 300, 500, 750][Math.min(level - 1, 4)];
   const prevLevelXP = level > 1 ? [0, 50, 150, 300, 500][Math.min(level - 1, 4)] : 0;
@@ -71,8 +76,38 @@ export default function WellbeingAvatar({ mood, xp, level, compact, equippedItem
     );
   }
 
+  const handleNameSave = () => {
+    if (onNameChange && nameInput.trim()) {
+      onNameChange(nameInput.trim());
+    }
+    setIsEditingName(false);
+  };
+
   return (
     <div className="flex flex-col items-center text-center">
+      {/* Avatar Name */}
+      <div className="mb-2 flex items-center gap-1.5">
+        {isEditingName ? (
+          <input
+            autoFocus
+            value={nameInput}
+            onChange={e => setNameInput(e.target.value)}
+            onBlur={handleNameSave}
+            onKeyDown={e => e.key === "Enter" && handleNameSave()}
+            className="bg-transparent border-b border-primary text-center text-sm font-semibold outline-none w-32"
+            maxLength={20}
+            placeholder="Name your avatar"
+          />
+        ) : (
+          <button
+            onClick={() => { setNameInput(avatarName || ""); setIsEditingName(true); }}
+            className="flex items-center gap-1 text-sm font-semibold text-foreground hover:text-primary transition-colors group"
+          >
+            {avatarName || "Tap to name me!"}
+            <Pencil size={12} className="text-muted-foreground group-hover:text-primary transition-colors" />
+          </button>
+        )}
+      </div>
       <motion.div
         animate={{ y: [0, -8, 0] }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}

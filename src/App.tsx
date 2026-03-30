@@ -26,7 +26,7 @@ const queryClient = new QueryClient();
 
 function AppContent() {
   const { user, loading, isSubscribed } = useAuth();
-  const { state, calendarEvents, completeTask, addTask, addFolder, deleteFolder, toggleFolderCollapse, submitCheckIn, takeRecoveryBreak, skipRecoveryBreak, purchaseItem, equipItem, addCalendarEvent, addCalendarEvents, updateCalendarEvent, deleteCalendarEvent, toggleCalendarTaskComplete } = useAppState();
+  const { state, calendarEvents, completeTask, addTask, addFolder, deleteFolder, toggleFolderCollapse, submitCheckIn, takeRecoveryBreak, skipRecoveryBreak, purchaseItem, equipItem, setAvatarName, addCalendarEvent, addCalendarEvents, updateCalendarEvent, deleteCalendarEvent, toggleCalendarTaskComplete } = useAppState();
 
   if (loading) {
     return (
@@ -48,6 +48,7 @@ function AppContent() {
               state={state}
               onCompleteTask={completeTask}
               onCheckIn={submitCheckIn}
+              onAvatarNameChange={setAvatarName}
             />
           }
         />

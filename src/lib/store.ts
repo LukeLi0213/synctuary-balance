@@ -48,6 +48,7 @@ export interface AppState {
   xp: number;
   level: number;
   avatarMood: AvatarMood;
+  avatarName: string;
   tasks: Task[];
   folders: TaskFolder[];
   todayCheckIn: CheckInData | null;
@@ -82,6 +83,7 @@ export const defaultState: AppState = {
   xp: 85,
   level: 2,
   avatarMood: "happy",
+  avatarName: "",
   tasks: [
     { id: "1", title: "Organic Chemistry Chapter 5", category: "studying", completed: false },
     { id: "2", title: "CS Problem Set #3", category: "assignment", completed: true, completedAt: new Date() },

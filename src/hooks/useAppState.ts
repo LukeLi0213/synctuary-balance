@@ -16,6 +16,7 @@ export function useAppState() {
       xp: newState.xp,
       level: newState.level,
       avatar_mood: newState.avatarMood,
+      avatar_name: newState.avatarName,
       tasks_completed: newState.weeklyStats.tasksCompleted,
       recovery_taken: newState.weeklyStats.recoveryTaken,
       balance_score: newState.weeklyStats.balanceScore,
@@ -39,6 +40,7 @@ export function useAppState() {
           xp: profile.xp,
           level: profile.level,
           avatarMood: (profile.avatar_mood as AvatarMood) || "happy",
+          avatarName: (profile as any).avatar_name || "",
           weeklyStats: {
             ...prev.weeklyStats,
             tasksCompleted: profile.tasks_completed,
@@ -229,6 +231,10 @@ export function useAppState() {
     });
   }, [updateAndSync]);
 
+  const setAvatarName = useCallback((name: string) => {
+    updateAndSync(prev => ({ ...prev, avatarName: name }));
+  }, [updateAndSync]);
+
   const addCalendarEvent = useCallback((event: Omit<CalendarEvent, "id">) => {
     setCalendarEvents(prev => [...prev, { ...event, id: `custom-${Date.now()}` }]);
   }, []);
@@ -269,6 +275,7 @@ export function useAppState() {
     skipRecoveryBreak,
     purchaseItem,
     equipItem,
+    setAvatarName,
     addCalendarEvent,
     addCalendarEvents,
     updateCalendarEvent,
