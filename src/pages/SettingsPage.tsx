@@ -133,8 +133,9 @@ export default function SettingsPage() {
                 <Crown size={16} /> Upgrade — $5/month
               </Button>
               <p className="text-xs text-muted-foreground text-center">
-                Questions or refunds? <a href="mailto:synctuary0@gmail.com" className="text-primary hover:underline">synctuary0@gmail.com</a>
+                Feedback or questions? <a href="mailto:synctuary0@gmail.com" className="text-primary hover:underline">synctuary0@gmail.com</a>
               </p>
+              <p className="text-[11px] text-muted-foreground/70 text-center">All sales are final. No refunds.</p>
             </div>
           )}
         </section>
