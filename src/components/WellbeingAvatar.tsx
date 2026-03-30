@@ -3,6 +3,7 @@ import avatarHappy from "@/assets/avatar-happy.png";
 import avatarTired from "@/assets/avatar-tired.png";
 import avatarCalm from "@/assets/avatar-calm.png";
 import avatarHappyScarf from "@/assets/avatar-happy-scarf.png";
+import avatarHappySunglasses from "@/assets/avatar-happy-sunglasses.png";
 import itemScarf from "@/assets/item-scarf.png";
 import { AvatarMood, AvatarItem, getAvatarMessage } from "@/lib/store";
 import { useMemo, useState } from "react";
@@ -44,9 +45,10 @@ export default function WellbeingAvatar({ mood, xp, level, compact, equippedItem
   const progress = ((xp - prevLevelXP) / (nextLevelXP - prevLevelXP)) * 100;
 
   const hasScarf = equippedItems.some(i => i.id === "scarf");
-  const currentAvatarImage = hasScarf ? avatarHappyScarf : avatarImages[mood];
+  const hasSunglasses = equippedItems.some(i => i.id === "sunglasses");
+  const currentAvatarImage = hasSunglasses ? avatarHappySunglasses : hasScarf ? avatarHappyScarf : avatarImages[mood];
 
-  const equippedOutfits = equippedItems.filter(i => i.type === "outfit" && i.id !== "scarf");
+  const equippedOutfits = equippedItems.filter(i => i.type === "outfit" && i.id !== "scarf" && i.id !== "sunglasses");
   const equippedPets = equippedItems.filter(i => i.type === "pet");
   const equippedDecorations = equippedItems.filter(i => i.type === "decoration");
 
