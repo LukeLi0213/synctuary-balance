@@ -40,6 +40,7 @@ export function useAppState() {
           xp: profile.xp,
           level: profile.level,
           avatarMood: (profile.avatar_mood as AvatarMood) || "happy",
+          avatarName: (profile as any).avatar_name || "",
           weeklyStats: {
             ...prev.weeklyStats,
             tasksCompleted: profile.tasks_completed,
