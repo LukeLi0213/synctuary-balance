@@ -1,0 +1,75 @@
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Crown, Calendar, Users, Palette } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
+
+interface UpgradeModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  feature?: string;
+}
+
+const FEATURES = [
+  { icon: Calendar, label: "Full Calendar with .ics import" },
+  { icon: Users, label: "Social Groups & Accountability" },
+  { icon: Palette, label: "Color Palettes & Font Customization" },
+];
+
+export default function UpgradeModal({ open, onOpenChange, feature }: UpgradeModalProps) {
+  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleUpgrade = async () => {
+    if (!user) {
+      onOpenChange(false);
+      navigate("/auth");
+      return;
+    }
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout");
+      if (error) throw error;
+      if (data?.url) {
+        window.open(data.url, "_blank");
+      }
+    } catch (e: any) {
+      toast({ title: "Error", description: e.message || "Could not start checkout", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-xl">
+            <Crown className="text-accent" size={24} />
+            Upgrade to Synctuary Pro
+          </DialogTitle>
+          <DialogDescription>
+            {feature
+              ? `${feature} is a Pro feature. Upgrade to unlock it and more!`
+              : "Unlock all premium features for $5/month."}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-3 py-3">
+          {FEATURES.map(({ icon: Icon, label }) => (
+            <div key={label} className="flex items-center gap-3 text-sm text-foreground">
+              <Icon size={18} className="text-primary shrink-0" />
+              <span>{label}</span>
+            </div>
+          ))}
+        </div>
+        <Button onClick={handleUpgrade} disabled={loading} className="w-full" size="lg">
+          {loading ? "Opening checkout…" : "Upgrade — $5/month"}
+        </Button>
+      </DialogContent>
+    </Dialog>
+  );
+}
