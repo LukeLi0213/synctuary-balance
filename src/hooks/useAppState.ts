@@ -231,6 +231,10 @@ export function useAppState() {
     });
   }, [updateAndSync]);
 
+  const setAvatarName = useCallback((name: string) => {
+    updateAndSync(prev => ({ ...prev, avatarName: name }));
+  }, [updateAndSync]);
+
   const addCalendarEvent = useCallback((event: Omit<CalendarEvent, "id">) => {
     setCalendarEvents(prev => [...prev, { ...event, id: `custom-${Date.now()}` }]);
   }, []);
@@ -271,10 +275,13 @@ export function useAppState() {
     skipRecoveryBreak,
     purchaseItem,
     equipItem,
+    setAvatarName,
     addCalendarEvent,
     addCalendarEvents,
     updateCalendarEvent,
     deleteCalendarEvent,
     toggleCalendarTaskComplete,
+  };
+}
   };
 }
