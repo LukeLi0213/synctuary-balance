@@ -111,13 +111,30 @@ export default function SettingsPage() {
               </Button>
             </div>
           ) : (
-            <div className="p-4 rounded-2xl border-2 border-border bg-card space-y-3">
+            <div className="p-4 rounded-2xl border-2 border-border bg-card space-y-4">
               <p className="text-sm text-muted-foreground">
-                Upgrade to <strong>Synctuary Pro</strong> to unlock Calendar, Groups, and custom themes.
+                Upgrade to <strong>Synctuary Pro</strong> to unlock premium features:
               </p>
-              <Button onClick={() => setShowUpgrade(true)} className="gap-2">
+              <div className="space-y-2">
+                <div className="flex items-start gap-2 text-sm text-foreground">
+                  <Check size={14} className="text-primary mt-0.5 shrink-0" />
+                  <span>Calendar use & incorporation of Google Calendar (.ics import)</span>
+                </div>
+                <div className="flex items-start gap-2 text-sm text-foreground">
+                  <Check size={14} className="text-primary mt-0.5 shrink-0" />
+                  <span>See what your friends are doing in the Group function</span>
+                </div>
+                <div className="flex items-start gap-2 text-sm text-foreground">
+                  <Check size={14} className="text-primary mt-0.5 shrink-0" />
+                  <span>Customizable themes — fonts, color palettes, and font sizes</span>
+                </div>
+              </div>
+              <Button onClick={() => setShowUpgrade(true)} className="gap-2 w-full">
                 <Crown size={16} /> Upgrade — $5/month
               </Button>
+              <p className="text-xs text-muted-foreground text-center">
+                Questions or refunds? <a href="mailto:synctuary0@gmail.com" className="text-primary hover:underline">synctuary0@gmail.com</a>
+              </p>
             </div>
           )}
         </section>
