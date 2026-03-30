@@ -5,7 +5,8 @@ import avatarCalm from "@/assets/avatar-calm.png";
 import avatarHappyScarf from "@/assets/avatar-happy-scarf.png";
 import itemScarf from "@/assets/item-scarf.png";
 import { AvatarMood, AvatarItem, getAvatarMessage } from "@/lib/store";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { Pencil } from "lucide-react";
 
 const avatarImages: Record<AvatarMood, string> = {
   happy: avatarHappy,
