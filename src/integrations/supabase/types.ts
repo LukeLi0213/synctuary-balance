@@ -73,6 +73,7 @@ export type Database = {
       profiles: {
         Row: {
           avatar_mood: string
+          avatar_name: string
           balance_score: number
           created_at: string
           display_name: string
@@ -86,6 +87,7 @@ export type Database = {
         }
         Insert: {
           avatar_mood?: string
+          avatar_name?: string
           balance_score?: number
           created_at?: string
           display_name?: string
@@ -99,6 +101,7 @@ export type Database = {
         }
         Update: {
           avatar_mood?: string
+          avatar_name?: string
           balance_score?: number
           created_at?: string
           display_name?: string
