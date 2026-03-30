@@ -1,13 +1,85 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { AppState, defaultState, getLevelFromXP, Task, TaskFolder, CheckInData, AvatarMood } from "@/lib/store";
 import { CalendarEvent } from "@/lib/calendarTypes";
+import { supabase } from "@/integrations/supabase/client";
 
 export function useAppState() {
   const [state, setState] = useState<AppState>(defaultState);
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
+  const syncTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Load profile from DB on mount if logged in
+  useEffect(() => {
+    const loadProfile = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) return;
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+      if (profile) {
+        setState(prev => ({
+          ...prev,
+          xp: profile.xp,
+          level: profile.level,
+          avatarMood: (profile.avatar_mood as AvatarMood) || "happy",
+          weeklyStats: {
+            ...prev.weeklyStats,
+            tasksCompleted: profile.tasks_completed,
+            recoveryTaken: profile.recovery_taken,
+            balanceScore: profile.balance_score,
+          },
+          inventory: prev.inventory.map(item => ({
+            ...item,
+            unlocked: item.unlocked || profile.xp >= item.xpRequired,
+            equipped: profile.equipped_items?.includes(item.id) || false,
+          })),
+        }));
+      }
+    };
+
+    loadProfile();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) loadProfile();
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Debounced sync to DB when relevant state changes
+  const syncToDb = useCallback(async (newState: AppState) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user) return;
+
+    const equippedIds = newState.inventory.filter(i => i.equipped).map(i => i.id);
+
+    await supabase.from("profiles").update({
+      xp: newState.xp,
+      level: newState.level,
+      avatar_mood: newState.avatarMood,
+      tasks_completed: newState.weeklyStats.tasksCompleted,
+      recovery_taken: newState.weeklyStats.recoveryTaken,
+      balance_score: newState.weeklyStats.balanceScore,
+      equipped_items: equippedIds,
+    }).eq("id", session.user.id);
+  }, []);
+
+  const updateAndSync = useCallback((updater: (prev: AppState) => AppState) => {
+    setState(prev => {
+      const next = updater(prev);
+      // Debounce DB sync
+      if (syncTimeout.current) clearTimeout(syncTimeout.current);
+      syncTimeout.current = setTimeout(() => syncToDb(next), 500);
+      return next;
+    });
+  }, [syncToDb]);
 
   const completeTask = useCallback((taskId: string) => {
-    setState(prev => {
+    updateAndSync(prev => {
       const tasks = prev.tasks.map(t =>
         t.id === taskId ? { ...t, completed: !t.completed, completedAt: !t.completed ? new Date() : undefined } : t
       );
@@ -15,7 +87,7 @@ export function useAppState() {
       const sinceBreak = justCompleted ? prev.tasksCompletedSinceLastBreak + 1 : Math.max(0, prev.tasksCompletedSinceLastBreak - 1);
       const newXP = justCompleted ? prev.xp + 10 : Math.max(0, prev.xp - 10);
       const needsBreak = sinceBreak >= 3;
-      
+
       let mood: AvatarMood = prev.avatarMood;
       if (sinceBreak >= 4) mood = "tired";
       else if (justCompleted) mood = "happy";
@@ -38,7 +110,7 @@ export function useAppState() {
         })),
       };
     });
-  }, []);
+  }, [updateAndSync]);
 
   const addTask = useCallback((title: string, category: Task["category"], folderId?: string) => {
     setState(prev => ({
@@ -58,7 +130,6 @@ export function useAppState() {
     setState(prev => ({
       ...prev,
       folders: prev.folders.filter(f => f.id !== folderId),
-      // Move folder tasks to unfiled
       tasks: prev.tasks.map(t => t.folderId === folderId ? { ...t, folderId: undefined } : t),
     }));
   }, []);
@@ -73,8 +144,8 @@ export function useAppState() {
   }, []);
 
   const submitCheckIn = useCallback((data: Omit<CheckInData, "date">) => {
-    const checkIn: CheckInData = { ...data, date: new Date().toISOString().split("T")[0] };
-    setState(prev => {
+    updateAndSync(prev => {
+      const checkIn: CheckInData = { ...data, date: new Date().toISOString().split("T")[0] };
       const avgScore = (data.sleepQuality + (6 - data.stressLevel) + data.mood) / 3;
       const xpBonus = Math.round(avgScore * 5);
       const newXP = prev.xp + xpBonus;
@@ -94,10 +165,10 @@ export function useAppState() {
         })),
       };
     });
-  }, []);
+  }, [updateAndSync]);
 
   const takeRecoveryBreak = useCallback(() => {
-    setState(prev => {
+    updateAndSync(prev => {
       const newXP = prev.xp + 15;
       return {
         ...prev,
@@ -117,10 +188,10 @@ export function useAppState() {
         })),
       };
     });
-  }, []);
+  }, [updateAndSync]);
 
   const skipRecoveryBreak = useCallback(() => {
-    setState(prev => {
+    updateAndSync(prev => {
       const newXP = Math.max(0, prev.xp - 10);
       return {
         ...prev,
@@ -135,18 +206,14 @@ export function useAppState() {
         },
       };
     });
-  }, []);
+  }, [updateAndSync]);
 
   const purchaseItem = useCallback((itemId: string) => {
-    setState(prev => {
+    updateAndSync(prev => {
       const item = prev.inventory.find(i => i.id === itemId);
       if (!item || item.owned || !item.unlocked) return prev;
-      if (prev.xp < item.xpRequired) {
-        console.log(`[Synctuary] Not enough XP to purchase ${item.name}. Need ${item.xpRequired}, have ${prev.xp}`);
-        return prev;
-      }
+      if (prev.xp < item.xpRequired) return prev;
       const newXP = prev.xp - item.xpRequired;
-      console.log(`[Synctuary] Purchased ${item.name} for ${item.xpRequired} XP. Remaining: ${newXP}`);
       return {
         ...prev,
         xp: newXP,
@@ -156,22 +223,20 @@ export function useAppState() {
         ),
       };
     });
-  }, []);
+  }, [updateAndSync]);
 
   const equipItem = useCallback((itemId: string) => {
-    setState(prev => {
+    updateAndSync(prev => {
       const item = prev.inventory.find(i => i.id === itemId);
       if (!item || !item.owned) return prev;
-      const newEquipped = !item.equipped;
-      console.log(`[Synctuary] ${newEquipped ? "Equipped" : "Unequipped"} ${item.name}`);
       return {
         ...prev,
         inventory: prev.inventory.map(i =>
-          i.id === itemId ? { ...i, equipped: newEquipped } : i
+          i.id === itemId ? { ...i, equipped: !i.equipped } : i
         ),
       };
     });
-  }, []);
+  }, [updateAndSync]);
 
   const addCalendarEvent = useCallback((event: Omit<CalendarEvent, "id">) => {
     setCalendarEvents(prev => [...prev, { ...event, id: `custom-${Date.now()}` }]);
