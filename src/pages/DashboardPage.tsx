@@ -50,7 +50,7 @@ export default function DashboardPage({ state, onCompleteTask, onCheckIn, onAvat
         transition={{ delay: 0.1 }}
         className="glass-card-elevated p-6 mb-4"
       >
-        <WellbeingAvatar mood={state.avatarMood} xp={state.xp} level={state.level} />
+        <WellbeingAvatar mood={state.avatarMood} xp={state.xp} level={state.level} avatarName={state.avatarName} onNameChange={onAvatarNameChange} />
       </motion.div>
 
       {/* Energy Indicator */}
