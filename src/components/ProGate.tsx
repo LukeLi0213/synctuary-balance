@@ -58,9 +58,10 @@ export default function ProGate({ feature, children }: ProGateProps) {
 
         <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
           <Mail size={12} />
-          <span>Questions or feedback?</span>
+          <span>Feedback or questions?</span>
           <a href="mailto:synctuary0@gmail.com" className="text-primary hover:underline">synctuary0@gmail.com</a>
         </div>
+        <p className="text-[11px] text-muted-foreground/70">All sales are final. No refunds.</p>
 
         <UpgradeModal open={showUpgrade} onOpenChange={setShowUpgrade} feature={feature} />
       </div>
