@@ -15,7 +15,7 @@ interface Props {
   onAvatarNameChange: (name: string) => void;
 }
 
-export default function DashboardPage({ state, onCompleteTask, onCheckIn }: Props) {
+export default function DashboardPage({ state, onCompleteTask, onCheckIn, onAvatarNameChange }: Props) {
   const navigate = useNavigate();
   const todayTasks = state.tasks;
   const completedCount = todayTasks.filter(t => t.completed).length;
