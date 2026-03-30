@@ -15,14 +15,17 @@ import SettingsPage from "@/pages/SettingsPage";
 import AuthPage from "@/pages/AuthPage";
 import GroupPage from "@/pages/GroupPage";
 import NotFound from "@/pages/NotFound";
+import UpgradeModal from "@/components/UpgradeModal";
 import { useAppState } from "@/hooks/useAppState";
 import { ThemeProvider } from "@/hooks/useThemeSettings";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { useSubscriptionGate } from "@/hooks/useSubscriptionGate";
+import ProGate from "@/components/ProGate";
 
 const queryClient = new QueryClient();
 
 function AppContent() {
-  const { user, loading } = useAuth();
+  const { user, loading, isSubscribed } = useAuth();
   const { state, calendarEvents, completeTask, addTask, addFolder, deleteFolder, toggleFolderCollapse, submitCheckIn, takeRecoveryBreak, skipRecoveryBreak, purchaseItem, equipItem, addCalendarEvent, addCalendarEvents, updateCalendarEvent, deleteCalendarEvent, toggleCalendarTaskComplete } = useAppState();
 
   if (loading) {
@@ -83,16 +86,18 @@ function AppContent() {
         <Route
           path="/calendar"
           element={
-            <CalendarPage
-              tasks={state.tasks}
-              recoveryTaken={state.weeklyStats.recoveryTaken}
-              events={calendarEvents}
-              onAddEvent={addCalendarEvent}
-              onAddEvents={addCalendarEvents}
-              onUpdateEvent={updateCalendarEvent}
-              onDeleteEvent={deleteCalendarEvent}
-              onToggleTaskComplete={toggleCalendarTaskComplete}
-            />
+            <ProGate feature="Calendar">
+              <CalendarPage
+                tasks={state.tasks}
+                recoveryTaken={state.weeklyStats.recoveryTaken}
+                events={calendarEvents}
+                onAddEvent={addCalendarEvent}
+                onAddEvents={addCalendarEvents}
+                onUpdateEvent={updateCalendarEvent}
+                onDeleteEvent={deleteCalendarEvent}
+                onToggleTaskComplete={toggleCalendarTaskComplete}
+              />
+            </ProGate>
           }
         />
         <Route
@@ -111,7 +116,18 @@ function AppContent() {
         <Route path="/resources" element={<ResourcesPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/auth" element={<AuthPage />} />
-        <Route path="/group" element={user ? <GroupPage /> : <AuthPage />} />
+        <Route
+          path="/group"
+          element={
+            user ? (
+              <ProGate feature="Social Groups">
+                <GroupPage />
+              </ProGate>
+            ) : (
+              <AuthPage />
+            )
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <BottomNav />
