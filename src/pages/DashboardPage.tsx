@@ -12,6 +12,7 @@ interface Props {
   state: AppState;
   onCompleteTask: (id: string) => void;
   onCheckIn: (data: Omit<CheckInData, "date">) => void;
+  onAvatarNameChange: (name: string) => void;
 }
 
 export default function DashboardPage({ state, onCompleteTask, onCheckIn }: Props) {
