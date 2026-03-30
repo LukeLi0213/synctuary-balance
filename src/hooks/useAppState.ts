@@ -8,18 +8,31 @@ export function useAppState() {
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
   const syncTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const syncToDb = useRef(async (newState: AppState) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user) return;
+    const equippedIds = newState.inventory.filter(i => i.equipped).map(i => i.id);
+    await supabase.from("profiles").update({
+      xp: newState.xp,
+      level: newState.level,
+      avatar_mood: newState.avatarMood,
+      tasks_completed: newState.weeklyStats.tasksCompleted,
+      recovery_taken: newState.weeklyStats.recoveryTaken,
+      balance_score: newState.weeklyStats.balanceScore,
+      equipped_items: equippedIds,
+    }).eq("id", session.user.id);
+  });
+
   // Load profile from DB on mount if logged in
   useEffect(() => {
     const loadProfile = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) return;
-
       const { data: profile } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", session.user.id)
         .single();
-
       if (profile) {
         setState(prev => ({
           ...prev,
@@ -40,43 +53,21 @@ export function useAppState() {
         }));
       }
     };
-
     loadProfile();
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) loadProfile();
     });
-
     return () => subscription.unsubscribe();
-  }, []);
-
-  // Debounced sync to DB when relevant state changes
-  const syncToDb = useCallback(async (newState: AppState) => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session?.user) return;
-
-    const equippedIds = newState.inventory.filter(i => i.equipped).map(i => i.id);
-
-    await supabase.from("profiles").update({
-      xp: newState.xp,
-      level: newState.level,
-      avatar_mood: newState.avatarMood,
-      tasks_completed: newState.weeklyStats.tasksCompleted,
-      recovery_taken: newState.weeklyStats.recoveryTaken,
-      balance_score: newState.weeklyStats.balanceScore,
-      equipped_items: equippedIds,
-    }).eq("id", session.user.id);
   }, []);
 
   const updateAndSync = useCallback((updater: (prev: AppState) => AppState) => {
     setState(prev => {
       const next = updater(prev);
-      // Debounce DB sync
       if (syncTimeout.current) clearTimeout(syncTimeout.current);
-      syncTimeout.current = setTimeout(() => syncToDb(next), 500);
+      syncTimeout.current = setTimeout(() => syncToDb.current(next), 500);
       return next;
     });
-  }, [syncToDb]);
+  }, []);
 
   const completeTask = useCallback((taskId: string) => {
     updateAndSync(prev => {
