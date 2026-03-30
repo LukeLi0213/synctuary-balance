@@ -76,8 +76,38 @@ export default function WellbeingAvatar({ mood, xp, level, compact, equippedItem
     );
   }
 
+  const handleNameSave = () => {
+    if (onNameChange && nameInput.trim()) {
+      onNameChange(nameInput.trim());
+    }
+    setIsEditingName(false);
+  };
+
   return (
     <div className="flex flex-col items-center text-center">
+      {/* Avatar Name */}
+      <div className="mb-2 flex items-center gap-1.5">
+        {isEditingName ? (
+          <input
+            autoFocus
+            value={nameInput}
+            onChange={e => setNameInput(e.target.value)}
+            onBlur={handleNameSave}
+            onKeyDown={e => e.key === "Enter" && handleNameSave()}
+            className="bg-transparent border-b border-primary text-center text-sm font-semibold outline-none w-32"
+            maxLength={20}
+            placeholder="Name your avatar"
+          />
+        ) : (
+          <button
+            onClick={() => { setNameInput(avatarName || ""); setIsEditingName(true); }}
+            className="flex items-center gap-1 text-sm font-semibold text-foreground hover:text-primary transition-colors group"
+          >
+            {avatarName || "Tap to name me!"}
+            <Pencil size={12} className="text-muted-foreground group-hover:text-primary transition-colors" />
+          </button>
+        )}
+      </div>
       <motion.div
         animate={{ y: [0, -8, 0] }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
