@@ -131,6 +131,8 @@ function AppContent() {
             )
           }
         />
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms" element={<TermsOfUsePage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <BottomNav />
