@@ -15,6 +15,8 @@ import SettingsPage from "@/pages/SettingsPage";
 import AuthPage from "@/pages/AuthPage";
 import GroupPage from "@/pages/GroupPage";
 import NotFound from "@/pages/NotFound";
+import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
+import TermsOfUsePage from "@/pages/TermsOfUsePage";
 import UpgradeModal from "@/components/UpgradeModal";
 import { useAppState } from "@/hooks/useAppState";
 import { ThemeProvider } from "@/hooks/useThemeSettings";
@@ -129,6 +131,8 @@ function AppContent() {
             )
           }
         />
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms" element={<TermsOfUsePage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <BottomNav />
