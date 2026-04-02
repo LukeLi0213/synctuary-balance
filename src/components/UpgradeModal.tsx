@@ -96,7 +96,7 @@ export default function UpgradeModal({ open, onOpenChange, feature }: UpgradeMod
           {/* Price */}
           <div className="text-center py-2">
             <span className="text-3xl font-extrabold text-foreground">$5</span>
-            <span className="text-base text-muted-foreground font-medium">/month</span>
+            <span className="text-base text-muted-foreground font-medium">/year</span>
           </div>
 
           {/* Features */}
