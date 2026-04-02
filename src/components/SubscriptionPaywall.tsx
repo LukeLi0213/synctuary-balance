@@ -143,7 +143,7 @@ export default function SubscriptionPaywall({
           </p>
           <p>
             Account will be charged for renewal within 24 hours prior to the end of the
-            current period at the cost of $5.00/month.
+            current period at the cost of $5.00/year.
           </p>
           <p>
             Subscriptions may be managed by the user and auto-renewal may be turned off
