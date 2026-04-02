@@ -139,17 +139,17 @@ export default function GroupPage() {
     if (!inviteCode.trim()) return;
 
     // Find group by invite code
-    const { data: groups } = await supabase
+    const { data: foundGroups } = await supabase
       .from("groups")
       .select("*")
       .eq("invite_code", inviteCode.trim().toLowerCase());
 
-    if (!groups?.length) {
+    if (!foundGroups?.length) {
       toast.error("No group found with that invite code");
       return;
     }
 
-    const group = groups[0];
+    const group = foundGroups[0];
 
     // Check if already a member
     const { data: existing } = await supabase
