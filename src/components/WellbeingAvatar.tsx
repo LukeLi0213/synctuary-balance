@@ -39,6 +39,7 @@ interface Props {
 export default function WellbeingAvatar({ mood, xp, level, compact, equippedItems = [], avatarName, onNameChange }: Props) {
   const [isEditingName, setIsEditingName] = useState(false);
   const [nameInput, setNameInput] = useState(avatarName || "");
+  useEffect(() => { setNameInput(avatarName || ""); }, [avatarName]);
   const message = useMemo(() => getAvatarMessage(mood), [mood]);
   const nextLevelXP = [50, 150, 300, 500, 750][Math.min(level - 1, 4)];
   const prevLevelXP = level > 1 ? [0, 50, 150, 300, 500][Math.min(level - 1, 4)] : 0;
