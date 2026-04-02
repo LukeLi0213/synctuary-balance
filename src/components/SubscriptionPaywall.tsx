@@ -181,8 +181,8 @@ Subscription automatically renews unless auto-renew is turned off at least
           <DialogHeader>
             <DialogTitle>Confirm Subscription</DialogTitle>
             <DialogDescription>
-              You're subscribing to Synctuary Pro at <strong>$5.00/month</strong>. 
-              Your subscription will auto-renew monthly until canceled.
+You're subscribing to Synctuary Pro at <strong>$5.00/year</strong>. 
+              Your subscription will auto-renew yearly until canceled.
             </DialogDescription>
           </DialogHeader>
           <div className="flex gap-3 pt-2">
