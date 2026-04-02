@@ -96,7 +96,7 @@ export default function UpgradeModal({ open, onOpenChange, feature }: UpgradeMod
           {/* Price */}
           <div className="text-center py-2">
             <span className="text-3xl font-extrabold text-foreground">$5</span>
-            <span className="text-base text-muted-foreground font-medium">/month</span>
+            <span className="text-base text-muted-foreground font-medium">/year</span>
           </div>
 
           {/* Features */}
@@ -113,14 +113,14 @@ export default function UpgradeModal({ open, onOpenChange, feature }: UpgradeMod
           </div>
 
           <Button onClick={handleUpgrade} disabled={loading} className="w-full" size="lg">
-            {loading ? "Opening checkout…" : "Subscribe — $5/month"}
+            {loading ? "Opening checkout…" : "Subscribe — $5/year"}
           </Button>
 
           {/* Apple disclosures */}
           <div className="space-y-1.5 text-[10px] leading-relaxed text-muted-foreground/70 text-center">
             <p>Payment will be charged to your iTunes Account at confirmation of purchase.</p>
             <p>Subscription automatically renews unless auto-renew is turned off at least 24 hours before the end of the current period.</p>
-            <p>Account will be charged for renewal within 24 hours prior to the end of the current period at $5.00/month.</p>
+            <p>Account will be charged for renewal within 24 hours prior to the end of the current period at $5.00/year.</p>
             <p>Subscriptions may be managed by the user and auto-renewal may be turned off by going to Account Settings after purchase.</p>
           </div>
 
@@ -150,8 +150,8 @@ export default function UpgradeModal({ open, onOpenChange, feature }: UpgradeMod
           <DialogHeader>
             <DialogTitle>Confirm Subscription</DialogTitle>
             <DialogDescription>
-              You're subscribing to Synctuary Pro at <strong>$5.00/month</strong>.
-              Your subscription will auto-renew monthly until canceled.
+You're subscribing to Synctuary Pro at <strong>$5.00/year</strong>.
+              Your subscription will auto-renew yearly until canceled.
             </DialogDescription>
           </DialogHeader>
           <div className="flex gap-3 pt-2">

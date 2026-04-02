@@ -104,7 +104,7 @@ export default function SubscriptionPaywall({
         {/* Price — large & clear */}
         <div className="text-center">
           <span className="text-4xl font-extrabold text-foreground">$5</span>
-          <span className="text-lg text-muted-foreground font-medium">/month</span>
+          <span className="text-lg text-muted-foreground font-medium">/year</span>
         </div>
 
         {/* Features */}
@@ -129,7 +129,7 @@ export default function SubscriptionPaywall({
           size="lg"
           className="w-full text-base"
         >
-          {loading ? "Opening checkout…" : user ? "Subscribe — $5/month" : "Sign in to Subscribe"}
+          {loading ? "Opening checkout…" : user ? "Subscribe — $5/year" : "Sign in to Subscribe"}
         </Button>
 
         {/* Apple-required subscription disclosures */}
@@ -138,12 +138,12 @@ export default function SubscriptionPaywall({
             Payment will be charged to your iTunes Account at confirmation of purchase.
           </p>
           <p>
-            Subscription automatically renews unless auto-renew is turned off at least
+Subscription automatically renews unless auto-renew is turned off at least
             24 hours before the end of the current period.
           </p>
           <p>
             Account will be charged for renewal within 24 hours prior to the end of the
-            current period at the cost of $5.00/month.
+            current period at the cost of $5.00/year.
           </p>
           <p>
             Subscriptions may be managed by the user and auto-renewal may be turned off
@@ -181,8 +181,8 @@ export default function SubscriptionPaywall({
           <DialogHeader>
             <DialogTitle>Confirm Subscription</DialogTitle>
             <DialogDescription>
-              You're subscribing to Synctuary Pro at <strong>$5.00/month</strong>. 
-              Your subscription will auto-renew monthly until canceled.
+You're subscribing to Synctuary Pro at <strong>$5.00/year</strong>. 
+              Your subscription will auto-renew yearly until canceled.
             </DialogDescription>
           </DialogHeader>
           <div className="flex gap-3 pt-2">
