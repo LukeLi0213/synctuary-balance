@@ -104,7 +104,7 @@ export default function SubscriptionPaywall({
         {/* Price — large & clear */}
         <div className="text-center">
           <span className="text-4xl font-extrabold text-foreground">$5</span>
-          <span className="text-lg text-muted-foreground font-medium">/month</span>
+          <span className="text-lg text-muted-foreground font-medium">/year</span>
         </div>
 
         {/* Features */}
