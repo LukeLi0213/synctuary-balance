@@ -139,7 +139,7 @@ export default function GroupPage() {
     if (!inviteCode.trim()) return;
 
     // Find group by invite code
-    const { data: groups } = await supabase
+    const { data: foundGroups } = await supabase
       .from("groups")
       .select("*")
       .eq("invite_code", inviteCode.trim().toLowerCase());
