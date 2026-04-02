@@ -46,6 +46,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    let initialLoad = true;
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -58,16 +60,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     });
 
+    // Only set initial state if onAuthStateChange hasn't fired yet
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-      if (session?.user) {
-        checkSubscription();
+      if (initialLoad) {
+        setSession(session);
+        setUser(session?.user ?? null);
+        setLoading(false);
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      initialLoad = false;
+      subscription.unsubscribe();
+    };
   }, [checkSubscription]);
 
   // Periodic refresh every 60s
