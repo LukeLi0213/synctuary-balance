@@ -138,7 +138,7 @@ export default function SubscriptionPaywall({
             Payment will be charged to your iTunes Account at confirmation of purchase.
           </p>
           <p>
-            Subscription automatically renews unless auto-renew is turned off at least
+Subscription automatically renews unless auto-renew is turned off at least
             24 hours before the end of the current period.
           </p>
           <p>
