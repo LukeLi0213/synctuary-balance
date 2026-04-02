@@ -129,7 +129,7 @@ export default function SubscriptionPaywall({
           size="lg"
           className="w-full text-base"
         >
-          {loading ? "Opening checkout…" : user ? "Subscribe — $5/month" : "Sign in to Subscribe"}
+          {loading ? "Opening checkout…" : user ? "Subscribe — $5/year" : "Sign in to Subscribe"}
         </Button>
 
         {/* Apple-required subscription disclosures */}
