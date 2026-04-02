@@ -113,7 +113,7 @@ export default function UpgradeModal({ open, onOpenChange, feature }: UpgradeMod
           </div>
 
           <Button onClick={handleUpgrade} disabled={loading} className="w-full" size="lg">
-            {loading ? "Opening checkout…" : "Subscribe — $5/month"}
+            {loading ? "Opening checkout…" : "Subscribe — $5/year"}
           </Button>
 
           {/* Apple disclosures */}
