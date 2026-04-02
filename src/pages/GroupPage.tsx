@@ -144,12 +144,12 @@ export default function GroupPage() {
       .select("*")
       .eq("invite_code", inviteCode.trim().toLowerCase());
 
-    if (!groups?.length) {
+    if (!foundGroups?.length) {
       toast.error("No group found with that invite code");
       return;
     }
 
-    const group = groups[0];
+    const group = foundGroups[0];
 
     // Check if already a member
     const { data: existing } = await supabase

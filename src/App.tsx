@@ -17,7 +17,7 @@ import GroupPage from "@/pages/GroupPage";
 import NotFound from "@/pages/NotFound";
 import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
 import TermsOfUsePage from "@/pages/TermsOfUsePage";
-import UpgradeModal from "@/components/UpgradeModal";
+
 import { useAppState } from "@/hooks/useAppState";
 import { ThemeProvider } from "@/hooks/useThemeSettings";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
