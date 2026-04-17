@@ -23,6 +23,8 @@ import { ThemeProvider } from "@/hooks/useThemeSettings";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import { useSubscriptionGate } from "@/hooks/useSubscriptionGate";
 import ProGate from "@/components/ProGate";
+import { PreviewModeProvider } from "@/hooks/usePreviewMode";
+import PreviewModeToolbar from "@/components/PreviewModeToolbar";
 
 const queryClient = new QueryClient();
 
@@ -142,15 +144,18 @@ function AppContent() {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <ThemeProvider>
-        <TooltipProvider>
-          <BrowserRouter>
-            <AppContent />
-          </BrowserRouter>
-        </TooltipProvider>
-      </ThemeProvider>
-    </AuthProvider>
+    <PreviewModeProvider>
+      <AuthProvider>
+        <ThemeProvider>
+          <TooltipProvider>
+            <BrowserRouter>
+              <PreviewModeToolbar />
+              <AppContent />
+            </BrowserRouter>
+          </TooltipProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </PreviewModeProvider>
   </QueryClientProvider>
 );
 
