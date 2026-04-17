@@ -229,7 +229,7 @@ export default function CalendarPage({
             className="rounded-xl gap-1 text-xs"
             onClick={() => fileInputRef.current?.click()}
           >
-            <Upload size={14} /> Import .ics
+            <Upload size={14} /> Import from Google or Apple Calendar
           </Button>
         </div>
       </motion.div>
