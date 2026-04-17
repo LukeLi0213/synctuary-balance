@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
+import { usePreviewMode } from "@/hooks/usePreviewMode";
 
 interface AuthContextType {
   user: User | null;
@@ -103,8 +104,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut();
   };
 
+  // Dev-only preview overrides — simulate subscription / auth states without
+  // touching real Supabase data. Guarded by usePreviewMode (which itself only
+  // activates in dev/preview environments).
+  const { mode: previewMode, isPreviewEnvironment } = usePreviewMode();
+
+  let effectiveUser = user;
+  let effectiveSession = session;
+  let effectiveIsSubscribed = isSubscribed;
+
+  if (isPreviewEnvironment && previewMode !== "off") {
+    if (previewMode === "logged-out") {
+      effectiveUser = null;
+      effectiveSession = null;
+      effectiveIsSubscribed = false;
+    } else if (previewMode === "subscriber") {
+      effectiveIsSubscribed = true;
+    } else if (previewMode === "free") {
+      effectiveIsSubscribed = false;
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, session, loading, isSubscribed, subscriptionEnd, subscriptionLoading, signUp, signIn, signOut, checkSubscription }}>
+    <AuthContext.Provider value={{
+      user: effectiveUser,
+      session: effectiveSession,
+      loading,
+      isSubscribed: effectiveIsSubscribed,
+      subscriptionEnd,
+      subscriptionLoading,
+      signUp,
+      signIn,
+      signOut,
+      checkSubscription,
+    }}>
       {children}
     </AuthContext.Provider>
   );
